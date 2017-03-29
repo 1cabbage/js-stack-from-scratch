@@ -1,33 +1,33 @@
 # 02 - Babel, ES6, ESLint, Flow, Jest, and Husky
 
-Code for this chapter available [here](https://github.com/verekia/js-stack-walkthrough/tree/master/02-babel-es6-eslint-flow-jest-husky).
+本章代码在 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/02-babel-es6-eslint-flow-jest-husky)。
 
-We're now going to use some ES6 syntax, which is a great improvement over the "old" ES5 syntax. All browsers and JS environments understand ES5 well, but not ES6. That's where a tool called Babel comes to the rescue!
+我们将在本章使用 ES6 语法，与 ES5 语法相比，它更加优雅。几乎所有的浏览器和 JS 运行环境都能理解 ES5，但却不能很好地运行 ES6。为此，一个名为 Babel 的工具应运而生。
 
 ## Babel
 
-> 💡 **[Babel](https://babeljs.io/)** is a compiler that transforms ES6 code (and other things like React's JSX syntax) into ES5 code. It is very modular and can be used in tons of different [environments](https://babeljs.io/docs/setup/). It is by far the preferred ES5 compiler of the React community.
+> 💡 **[Babel](https://babeljs.io/)** 是一个将 ES6 代码 转换为 ES5 代码的编译器（一些其他语法，比如 JSX 语法也能够被编译）。 它非常模块化，可悲运用于各种 [环境](https://babeljs.io/docs/setup/)。目前为止，它是 React 社区最受推崇的 ES5 编译器。
 
-- Move your `index.js` into a new `src` folder. This is where you will write your ES6 code. Remove the previous `color`-related code in `index.js`, and replace it with a simple:
+- 把 `index.js` 移动到新创建的 `src` 文件夹下。 在该文件夹下，使用 ES6 语法。 删除和 `color` 有关的代码，用下面的内容替换：
 
 ```js
 const str = 'ES6'
 console.log(`Hello ${str}`)
 ```
 
-We're using a *template string* here, which is an ES6 feature that lets us inject variables directly inside the string without concatenation using `${}`. Note that template strings are created using **backquotes**.
+我们这里使用的 ES6 语法是 *模板字符串*，它允许我们在字符串中通过 `${}` 插入变量。注意模板语法使用 **反引号**.
 
-- Run `yarn add --dev babel-cli` to install the CLI interface for Babel.
+- 运行 `yarn add --dev babel-cli` Babel CLI（命令行工具）。
 
-Babel CLI comes with [two executables](https://babeljs.io/docs/usage/cli/): `babel`, which compiles ES6 files into new ES5 files, and `babel-node`, which you can use to replace your call to the `node` binary and execute ES6 files directly on the fly. `babel-node` is great for development but it is heavy and not meant for production. In this chapter we are going to use `babel-node` to set up the development environment, and in the next one we'll use `babel` to build ES5 files for production.
+Babel CLI 有 [两种执行方式](https://babeljs.io/docs/usage/cli/): `babel`，将 ES6 文件转换为 ES5 文件； `babel-node` 可以替换 `node`，用来轻量级地直接执行 ES6 文件。 `babel-node` 适用于开发，但对于生产环境来说，它太笨重了。在本章中，我们使用 `babel-node` 来配置开发环境；接下来，我们将使用 `babel` 来为生产环境打包 ES5 文件。
 
-- In `package.json`, in your `start` script, replace `node .` by `babel-node src` (`index.js` is the default file Node looks for, which is why we can omit `index.js`).
+- 在 `package.json`  `start` 脚本中, 用 `babel-node src` 来替换 `node .` (`index.js` 是 Node 默认执行的文件，因此我们可以省略 `index.js`)。
 
-If you try to run `yarn start` now, it should print the correct output, but Babel is not actually doing anything. That's because we didn't give it any information about which transformations we want to apply. The only reason it prints the right output is because Node natively understands ES6 without Babel's help. Some browsers or older versions of Node would not be so successful though!
+如果你现在运行 `yarn start` ，输出应该没啥问题；不过 Babel 这时候并起到什么作用。这是因为我们没有告诉 Babel 我们需要进行何种转换。输出正确的唯一原因是 Node 原生支持了 ES6 语法。然而，某些浏览器以及老版本的 Node 却不支持这些最新的语法。
 
-- Run `yarn add --dev babel-preset-env` to install a Babel preset package called `env`, which contains configurations for the most recent ECMAScript features supported by Babel.
+- 运行 `yarn add --dev babel-preset-env` 来安装一个叫 `env` 的 Babel preset 包，它包含了大部分 Babel 支持转化的 ECMAScript 最新语法的配置。
 
-- Create a `.babelrc` file at the root of your project, which is a JSON file for your Babel configuration. Write the following to it to make Babel use the `env` preset:
+- 在根目录创建 `.babelrc` 文件，它是一个用来配置 Babel 的 JSON 文件。 添加如下内容，使 Babel 使用 `env` preset：
 
 ```json
 {
@@ -37,7 +37,7 @@ If you try to run `yarn start` now, it should print the correct output, but Babe
 }
 ```
 
-🏁 `yarn start` should still work, but it's actually doing something now. We can't really tell if it is though, since we're using `babel-node` to interpret ES6 code on the fly. You'll soon have a proof that your ES6 code is actually transformed when you reach the [ES6 modules syntax](#the-es6-modules-syntax) section of this chapter.
+🏁 `yarn start` 现在能够运行成功，并且 Babel 确实起了点作用。但是为了轻量开发，我们使用了 `babel-node`，所以我们还不能确定 We can't really tell if it is though, since we're using `babel-node` to interpret ES6 code on the fly. You'll soon have a proof that your ES6 code is actually transformed when you reach the [ES6 modules syntax](#the-es6-modules-syntax) section of this chapter.
 
 ## ES6
 
