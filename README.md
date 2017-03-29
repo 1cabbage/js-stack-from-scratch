@@ -1,5 +1,5 @@
-# JavaScript Stack from Scratch
-
+# 从零开始构建 JavaScript 技术栈 - 中文版
+这是[从零开始构建 JavaScript 技术栈 - 中文版](https://github.com/verekia/js-stack-from-scratch)
 [![Build Status](https://travis-ci.org/verekia/js-stack-from-scratch.svg?branch=master)](https://travis-ci.org/verekia/js-stack-from-scratch)
 [![Release](https://img.shields.io/github/release/verekia/js-stack-from-scratch.svg?style=flat-square)](https://github.com/verekia/js-stack-from-scratch/releases)
 [![Dependencies](https://img.shields.io/david/verekia/js-stack-boilerplate.svg?style=flat-square)](https://david-dm.org/verekia/js-stack-boilerplate)
@@ -16,23 +16,23 @@
 [![Webpack](/img/webpack-padded-90.png)](https://webpack.github.io/)
 [![Bootstrap](/img/bootstrap-padded-90.png)](http://getbootstrap.com/)
 
-Welcome to my modern JavaScript stack tutorial: **JavaScript Stack from Scratch**.
+欢迎来到我的 JavaScript 技术栈指南： **从零开始构建 JavaScript 技术栈**.
 
-> 🎉 **This is the V2 of the tutorial, major changes happened since the 2016 release. Check the [Change Log](/CHANGELOG.md)!**
+> 🎉 **这是本教程的第二版，与2016年发布的版本相比，有重大更新。欢迎查看 [更新日志](/CHANGELOG.md)!**
 
-This is a straight-to-the-point guide to assembling a JavaScript stack. It requires some general programming knowledge, and JavaScript basics. **It focuses on wiring tools together** and giving you the **simplest possible example** for each tool. You can see this tutorial as *a way to write your own boilerplate from scratch*. Since the goal of this tutorial is to assemble various tools, I do not go into details about how these tools work individually. Refer to their documentation or find other tutorials if you want to acquire deeper knowledge in them.
+这是一个直观的 JavaScript 技术栈构建指南。 阅读者需要具备一些简单的编程知识和 JavaScript 基础。  **教程的核心是把各种工具结合起来** 并且为每一种工具提供了 **最简单的例子**。 学习该教程后，你可以尝试 *从零编写你自己的 JavaScript 技术栈模板*。 因为本教程的核心是结合各种工具的使用，我并没有详细地讲解每一种工具该怎么用。如果你想要进一步了解浙西工具的使用，请参考它们的文档或指南。
 
-You don't need to use this entire stack if you build a simple web page with a few JS interactions of course (a combination of Browserify/Webpack + Babel + jQuery is enough to be able to write ES6 code in different files), but if you want to build a web app that scales, and need help setting things up, this tutorial will work great for you.
+如果你只是想构建一个简单的 web 页面，你可能并不需要这个完整的技术栈（把 Browserify/Webpack + Babel + jQuery 结合起来就足够了）；但如果你需要构建一个可伸缩的 web app，并且需要配置各种环境，那这个教程正好适合你。
 
-A big chunk of the stack described in this tutorial uses React. If you are beginning and just want to learn React, [create-react-app](https://github.com/facebookincubator/create-react-app) will get you up and running with a React environment very quickly with a pre-made configuration. I would for instance recommend this approach to someone who arrives in a team that's using React and needs to catch up with a learning playground. In this tutorial you won't use a pre-made configuration, because I want you to understand everything that's happening under the hood.
+该教程的大量描述都和 React 有关。如果你是个新手并且想要学习 React，[create-react-app](https://github.com/facebookincubator/create-react-app) 预设的配置能让你迅速搭建好 React 的运行环境。对于那些刚加入使用 React 团队的人来说，我建议他们使用 create-react-app 来快速搭建学习环境。在本教程中，你不会使用任何预配置，因为我希望你能够理解那些配置到底起了什么作用。
 
-Code examples are available for each chapter, and you can run them all with `yarn && yarn start`. I recommend writing everything from scratch yourself by following the **step-by-step instructions** though.
+每一章的代码示例都包含在教程中，你可以通过 `yarn && yarn start` 来运行这些例子。不过，我建议你按着 **详细指南** 来把每一行代码都自己写一遍。
 
-Final code available in the [JS-Stack-Boilerplate repository](https://github.com/verekia/js-stack-boilerplate), and in the [releases](https://github.com/verekia/js-stack-from-scratch/releases). There is a [live demo](https://js-stack.herokuapp.com/) too.
+最终代码在 [JS-Stack-Boilerplate repository](https://github.com/verekia/js-stack-boilerplate), 和 [releases](https://github.com/verekia/js-stack-from-scratch/releases). 在线示例： [live demo](https://js-stack.herokuapp.com/) 。
 
-Works on Linux, macOS, and Windows.
+可运行于 Linux， macOS， 以及 Windows。
 
-## Table of contents
+## 目录
 
 [01 - Node, Yarn, `package.json`](/tutorial/01-node-yarn-package-json.md#readme)
 
@@ -52,19 +52,19 @@ Works on Linux, macOS, and Windows.
 
 [09 - Travis, Coveralls, Heroku](/tutorial/09-travis-coveralls-heroku.md#readme)
 
-## Coming up next
+## 即将添加的内容
 
-Setting up your editor (Atom first), MongoDB, Progressive Web App, E2E testing.
+配置你的编辑器 (Atom 优先)， MongoDB， Progressive Web App， E2E testing。
 
-## Translations
+## 翻译
 
-If you want to add your translation, please read the [translation recommendations](/how-to-translate.md) to get started!
+如果想添加你的翻译，请先阅读 [translation recommendations](/how-to-translate.md) 。
 
 ### V2
 
-Your link here soon ;)
+你的链接 ;)
 
-Check out the [ongoing translations](https://github.com/verekia/js-stack-from-scratch/issues/147).
+查看 [进行中的翻译](https://github.com/verekia/js-stack-from-scratch/issues/147).
 
 ### V1
 
