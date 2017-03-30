@@ -1,20 +1,20 @@
 # 03 - Express, Nodemon, and PM2
 
-Code for this chapter available [here](https://github.com/verekia/js-stack-walkthrough/tree/master/03-express-nodemon-pm2).
+本章代码 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/03-express-nodemon-pm2).
 
-In this section we are going to create the server that will render our web app. We will also set up a development mode and a production mode for this server.
+本章我们会创建一个 web 服务器，并同时为这个服务器配置开发和生产两种模式。
 
 ## Express
 
-> 💡 **[Express](http://expressjs.com/)** is by far the most popular web application framework for Node. It provides a very simple and minimal API, and its features can be extended with *middleware*.
+> 💡 **[Express](http://expressjs.com/)** 是 Node 社区最流行的框架，API 非常简单，但被各种 *中间件* 扩展后，威力巨大。
 
-Let's set up a minimal Express server to serve an HTML page with some CSS.
+接下来配置一个 Express 服务器来提供 HTML 和 CSS。
 
-- Delete everything inside `src`
+- 删除 `src` 目录下所有文件。
 
-Create the following files and folders:
+创建以下文件和文件夹
 
-- Create a `public/css/style.css` file containing:
+- 创建 `public/css/style.css` ：
 
 ```css
 body {
@@ -28,13 +28,13 @@ h1 {
 }
 ```
 
-- Create an empty `src/client/` folder.
+- 创建 `src/client/` 文件夹.
 
-- Create an empty `src/shared/` folder.
+- 创建 `src/shared/` 文件夹
 
-This folder is where we put *isomorphic / universal* JavaScript code – files that are used by both the client and the server. A great use case of shared code is *routes*, as you will see later in this tutorial when we'll make an asynchronous call. Here we simply have some configuration constants as an example for now.
+这个文件夹下存放 *同构/通用* 的 JS 代码 - 可以同时被客户端和服务端使用的代码。常见的例子是 *路由代码*，在该教程中，我们会在发起异步请求的时候，用到路由。现在为了举例，我们只会在该文件夹下存放一些配置常亮。
 
-- Create a `src/shared/config.js` file, containing:
+- 创建 `src/shared/config.js` 文件：
 
 ```js
 // @flow
@@ -44,9 +44,9 @@ export const STATIC_PATH = '/static'
 export const APP_NAME = 'Hello App'
 ```
 
-If the Node process used to run your app has a `process.env.PORT` environment variable set (that's the case when you deploy to Heroku for instance), it will use this for the port. If there is none, we default to `8000`.
+如果你的 Node 进程有一个 `process.env.PORT` 环境变量 (比如当你部署到 Heroku 的时候)， 端口号就会是这个环境变量的值。如果没有这个环境变量，我们就把端口号设为 `8000`。
 
-- Create a `src/shared/util.js` file containing:
+- 创建 `src/shared/util.js` 文件：
 
 ```js
 // @flow
@@ -55,13 +55,13 @@ If the Node process used to run your app has a `process.env.PORT` environment va
 export const isProd = process.env.NODE_ENV === 'production'
 ```
 
-That's a simple util to test if we are running in production mode or not. The `// eslint-disable-next-line import/prefer-default-export` comment is because we only have one named export here. You can remove it as you add other exports in this file.
+这个简单的工具用来判断当前环境是否是生产环境。`// eslint-disable-next-line import/prefer-default-export` 这行注释是因为我们目前只导出了一个变量；当你添加了其他导出内容后，这行注释可以被删掉。
 
-- Run `yarn add express compression`
+- 运行 `yarn add express compression`
 
-`compression` is an Express middleware to activate Gzip compression on the server.
+`compression` 是一个用来在服务端开启 Gzip 压缩的 Express 中间件。
 
-- Create a `src/server/index.js` file containing:
+- 创建 `src/server/index.js` ：
 
 ```js
 // @flow
@@ -89,9 +89,9 @@ app.listen(WEB_PORT, () => {
 })
 ```
 
-Nothing fancy here, it's almost Express' Hello World tutorial with a few additional imports. We're using 2 different static file directories here. `dist` for generated files, `public` for declarative ones.
+以上代码没什么好说的，基本就是一个 Express 的 Hello World 教程。我们使用了两个静态文件目录： `dist` 用来存放工具转换后生成的文件， `public` 用来存储固有文件。
 
-- Create a `src/server/render-app.js` file containing:
+- 创建 `src/server/render-app.js` ：
 
 ```js
 // @flow
@@ -114,11 +114,13 @@ const renderApp = (title: string) =>
 export default renderApp
 ```
 
-You know how you typically have *templating engines* on the back-end? Well these are pretty much obsolete now that JavaScript supports template strings. Here we create a function that takes a `title` as a parameter and injects it in both the `title` and `h1` tags of the page, returning the complete HTML string. We also use a `STATIC_PATH` constant as the base path for all our static assets.
 
-### HTML template strings syntax highlighting in Atom (optional)
 
-It might be possible to get syntax highlighting working for HTML code inside template strings depending on your editor. In Atom, if you prefix your template string with an `html` tag (or any tag that *ends* with `html`, like `ilovehtml`), it will automatically highlight the content of that string. I sometimes use the `html` tag of the `common-tags` library to take advantage of this:
+我们创建了一个方法，以 `title` 为参数，并把参数插入到页面的 `title` 和 `h1` 标签中，最后返回了 HTML 字符串。 我们用 `STATIC_PATH` 常量作为所有静态资源的基础目录。
+
+### HTML 模板字符串语法在 Atom 中高亮 (可选)
+
+如果你的编辑器允许的话，模板字符串中的 HTML 代码可以实现语法高亮。在 Atom 中，如果你的模板字符串以 `html` 开头或结束（例如以`ilovehtml`结束）的话，Atom 会自动高亮其中的字符串。为了利用这一点，我有时候会利用 `common-tags` 包的 `html` 标签。
 
 ```js
 import { html } from `common-tags`
@@ -128,68 +130,68 @@ const template = html`
 `
 ```
 
-I did not include this trick in the boilerplate of this tutorial, since it seems to only work in Atom, and it's less than ideal. Some of you Atom users might find it useful though.
+我没有在教程的模板中添加这个技巧，是因为这个技巧目前好像只在 Atom 中适用，并且不太完美。当然，一些 Atom 用户可能觉得很受用。
 
-Anyway, back to business!
+好了，回到主题！
 
-- In `package.json` change your `start` script like so: `"start": "babel-node src/server",`
+- 在 `package.json` 中修改 `start` ： `"start": "babel-node src/server",`
 
-🏁 Run `yarn start`, and hit `localhost:8000` in your browser. If everything works as expected you should see a blank page with "Hello App" written both on the tab title and as a green heading on the page.
+🏁 运行 `yarn start` ，在浏览器中打开 `localhost:8000`。如果运行正常的话，你应该看到的是一个标题和内容都是 Hello App 的页面。
 
-**Note**: Some processes – typically processes that wait for things to happen, like a server for instance – will prevent you from entering commands in your terminal until they're done. To interrupt such processes and get your prompt back, press **Ctrl+C**. You can alternatively open a new terminal tab if you want to keep them running while being able to enter commands. You can also make these processes run in the background but that's out of the scope of this tutorial.
+**注意**: 某些进程 —— 例如服务器进程 —— 可能会阻止命令行的输入。按下 **Ctrl+C** 就能结束进程。如果你想保持进程运行，也可以新开一个命令行窗口。此外，你也可以让这些进程在后台运行 —— 不过这已经超过了本教程讨论的范围。
 
 ## Nodemon
 
-> 💡 **[Nodemon](https://nodemon.io/)** is a utility to automatically restart your Node server when file changes happen in the directory.
+> 💡 **[Nodemon](https://nodemon.io/)** 当文件更改时，这个工具会自动重启服务器。
 
-We are going to use Nodemon whenever we are in **development** mode.
+我们会在 **开发模式** 下使用这个包。
 
-- Run `yarn add --dev nodemon`
+- 运行 `yarn add --dev nodemon`
 
-- Change your `scripts` like so:
+- 修改 `scripts` ：
 
 ```json
 "start": "yarn dev:start",
 "dev:start": "nodemon --ignore lib --exec babel-node src/server",
 ```
 
-`start` is now just a pointer to an other task, `dev:start`. That gives us a layer of abstraction to tweak what the default task is.
+`start` 任务现在只是指向另一个任务 —— `dev:start`；这为我们提供了一层抽象，使我们可以切换默认任务。
 
-In `dev:start`, the `--ignore lib` flag is to *not* restart the server when changes happen in the `lib` directory. You don't have this directory yet, but we're going to generate it in the next section of this chapter, so it will soon make sense. Nodemon typically runs the `node` binary. In our case, since we're using Babel, we can tell Nodemon to use the `babel-node` binary instead. This way it will understand all the ES6/Flow code.
+在 `dev:start` 中， `--ignore lib` 的作用是忽略 `lib` 文件夹的修改；如果该文件夹下的文件发生更改， *无需* 重启服务器。现在你还没有这个目录，不过我们将在下一节中生成它。Nodemon 的运行依赖于 `node` ，我们让它使用 `babel-node` ，这样我们就能愉快地书写 ES6/Flow 代码了。
 
-🏁 Run `yarn start` and open `localhost:8000`. Go ahead and change the `APP_NAME` constant in `src/shared/config.js`, which should trigger a restart of your server in the terminal. Refresh the page to see the updated title. Note that this automatic restart of the server is different from *Hot Module Replacement*, which is when components on the page update in real-time. Here we still need a manual refresh, but at least we don't need to kill the process and restart it manually to see changes. Hot Module Replacement will be introduced in the next chapter.
+🏁 运行 `yarn start` 然后打开 `localhost:8000`。 修改 `src/shared/config.js` 文件下的 `APP_NAME` 常量，我们的修改会触发服务器重启。刷新页面，就能看到更改已经生效。注意，服务器重启和我们即将要说的 *热更新过* 是不同的概念。现在我们还需要手动刷新页面，但至少不需要干掉进程然后手动重启了。
 
 ## PM2
 
-> 💡 **[PM2](http://pm2.keymetrics.io/)** is a Process Manager for Node. It keeps your processes alive in production, and offers tons of features to manage them and monitor them.
+> 💡 **[PM2](http://pm2.keymetrics.io/)** 是 Node 的进程管理器，保证生产环境下进程的正常运行；同事允许你处理和监控进程。
 
-We are going to use PM2 whenever we are in **production** mode.
+我们会在 **生产模式** 下使用 PM2。
 
-- Run `yarn add --dev pm2`
+- 运行 `yarn add --dev pm2`
 
-In production, you want your server to be as performant as possible. `babel-node` triggers the whole Babel transpilation process for your files at each execution, which is not something you want in production. We need Babel to do all this work beforehand, and have our server serve plain old pre-compiled ES5 files.
+生产环境下，服务器越高效越好。每一次执行代码，`babel-node` 都会触发 Babel 的代码转换，因此，生产环境下不能用 `babel-node`。我们需要事先用 Babel 转换好代码，运行在服务器上的，应该是已经转换好的 ES5 代码。
 
-One of the main features of Babel is to take a folder of ES6 code (usually named `src`) and transpile it into a folder of ES5 code (usually named `lib`).
+Babel 的一大特点是把一个文件夹（通常命名为 `src`）下的 ES6 代码转换为 ES5 代码并保存在另一个文件夹下（通常命名为 `lib`）。
 
-This `lib` folder being auto-generated, it's a good practice to clean it up before a new build, since it may contain unwanted old files. A neat simple package to delete files with cross platform support is `rimraf`.
+`lib` 文件夹是自动生成的；每次生成前，都删除老文件，是公认的最佳实践 —— 否则，一些老文件可能还保留在该文件夹下。`rimraf` 是一个用来实现删除功能的包，特点是用法简单且跨平台。
 
-- Run `yarn add --dev rimraf`
+- 运行 `yarn add --dev rimraf`
 
-Let's add the following `prod:build` task to our `scripts`:
+把 `prod:build` 任务添加到 `scripts`：
 
 ```json
 "prod:build": "rimraf lib && babel src -d lib --ignore .test.js",
 ```
 
-- Run `yarn prod:build`, and it should generate a `lib` folder containing the transpiled code, except for files ending in `.test.js` (note that `.test.jsx` files are also ignored by this parameter).
+- 运行 `yarn prod:build` 命令，除了 `.test.js`（`.test.jsx`文件也会被忽略） 文件外，其他文件应该都被转化并保存于 `lib` 文件夹下了。
 
-- Add `/lib/` to your `.gitignore`
+- 把 `/lib/` 添加到 `.gitignore`
 
-One last thing: We are going to pass a `NODE_ENV` environment variable to our PM2 binary. With Unix, you would do this by running `NODE_ENV=production pm2`, but Windows uses a different syntax. We're going to use a small package called `cross-env` to make this syntax work on Windows as well.
+最后一件事：我们需要传一个名为 `NODE_ENV` 的环境变量给 PM2。Unix 系统用户可以直接用  `NODE_ENV=production pm2` ，但 Windows 用的却是另一个语法。为了通用，我们需要安装 `cross-env` 包。
 
-- Run `yarn add --dev cross-env`
+- 运行 `yarn add --dev cross-env`
 
-Let's update our `package.json` like so:
+修改 `package.json` ：
 
 ```json
 "scripts": {
@@ -204,18 +206,18 @@ Let's update our `package.json` like so:
 },
 ```
 
-🏁 Run `yarn prod:build`, then run `yarn prod:start`. PM2 should show an active process. Go to `http://localhost:8000/` in your browser and you should see your app. Your terminal should show the logs, which should be "Server running on port 8000 (production).". Note that with PM2, your processes are run in the background. If you press Ctrl+C, it will kill the `pm2 logs` command, which was the last command our our `prod:start` chain, but the server should still render the page. If you want to stop the server, run `yarn prod:stop`
+🏁 运行 `yarn prod:build`，然后运行 `yarn prod:start`。浏览 `http://localhost:8000/` 就能看到你的 APP 了。命令行输出的 logs 内容，应该是 "Server running on port 8000 (production)."。注意：使用 PM2，你的进程是在后台运行的。如果你按下 Ctrl+C，只会终止 `pm2 logs` 命令，但是你的服务器仍在运行。如果想停掉服务器，应该运行 `yarn prod:stop`。
 
-Now that we have a `prod:build` task, it would be neat to make sure it works fine before pushing code to the repository. Since it is probably unnecessary to run it for every commit, I suggest adding it to the `prepush` task:
+在 push 代码到仓库前，为了保证代码能正常编译，我们应该先运行一下 `prod:build`。但并不是每一次 commit 操作都需要重新编译，所以我建议把它添加到 `prepush` 任务：
 
 ```json
 "prepush": "yarn test && yarn prod:build"
 ```
 
-🏁 Run `yarn prepush` or just push your files to trigger the process.
+🏁 运行 `yarn prepush` 或者只是 push 代码来触发便宜操作。
 
-**Note**: We don't have any test here, so Jest will complain a bit. Ignore it for now.
+**注意**: 因为我们没有进行测试，所以 Jest 可能会“抱怨”一下~暂时不去管它！
 
-Next section: [04 - Webpack, React, HMR](04-webpack-react-hmr.md#readme)
+下一章: [04 - Webpack, React, HMR](04-webpack-react-hmr.md#readme)
 
-Back to the [previous section](02-babel-es6-eslint-flow-jest-husky.md#readme) or the [table of contents](https://github.com/verekia/js-stack-from-scratch#table-of-contents).
+回到 [上一章](02-babel-es6-eslint-flow-jest-husky.md#readme) 或者 [目录](https://github.com/verekia/js-stack-from-scratch#table-of-contents).
