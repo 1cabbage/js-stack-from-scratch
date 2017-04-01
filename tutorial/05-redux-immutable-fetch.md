@@ -355,7 +355,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(MessageAsync)
 ```
 
-You can see that in this container, we are referring to a `messageAsync` property, which we're going to add to our reducer soon.
+在这个 container, we are referring to a `messageAsync` property, which we're going to add to our reducer soon.
 
 What we need now is to create the `sayHelloAsync` action.
 
