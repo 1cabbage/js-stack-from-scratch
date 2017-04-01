@@ -1,14 +1,14 @@
 # 04 - Webpack, React, and Hot Module Replacement
 
-Code for this chapter available [here](https://github.com/verekia/js-stack-walkthrough/tree/master/04-webpack-react-hmr).
+本章代码在 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/04-webpack-react-hmr).
 
 ## Webpack
 
-> 💡 **[Webpack](https://webpack.js.org/)** is a *module bundler*. It takes a whole bunch of various source files, processes them, and assembles them into one (usually) JavaScript file called a bundle, which is the only file your client will execute.
+> 💡 **[Webpack](https://webpack.js.org/)** 是一个 *用来打包的模块*。它能把各种各样的文件打包进同一个文件（通常情况下是这样）内，你只需要引用这一个文件就可以。
 
-Let's create some very basic *hello world* and bundle it with Webpack.
+下面是一个用 Webpack 来打包的 *hello world* 示例。
 
-- In `src/shared/config.js`, add the following constants:
+- 在 `src/shared/config.js` 文件，添加如下内容：
 
 ```js
 export const WDS_PORT = 7000
@@ -17,7 +17,7 @@ export const APP_CONTAINER_CLASS = 'js-app'
 export const APP_CONTAINER_SELECTOR = `.${APP_CONTAINER_CLASS}`
 ```
 
-- Create an `src/client/index.js` file containing:
+- 创建 `src/client/index.js` ：
 
 ```js
 import 'babel-polyfill'
@@ -27,13 +27,13 @@ import { APP_CONTAINER_SELECTOR } from '../shared/config'
 document.querySelector(APP_CONTAINER_SELECTOR).innerHTML = '<h1>Hello Webpack!</h1>'
 ```
 
-If you want to use some of the most recent ES features in your client code, like `Promise`s, you need to include the [Babel Polyfill](https://babeljs.io/docs/usage/polyfill/) before anything else in your bundle.
+如果你需要在你的代码里应用 ES 的最新特点，比如 `Promise`，那你需要先在模块里导入 [Babel Polyfill](https://babeljs.io/docs/usage/polyfill/)。
 
-- Run `yarn add babel-polyfill`
+- 运行 `yarn add babel-polyfill`
 
-If you run ESLint on this file, it will complain about `document` being undefined.
+如果先在运行 ESLint，应该有错误提示 `document` 未定义。
 
-- Add the following to `env` in your `.eslintrc.json` to allow the use of `window` and `document`:
+- 修改 `.eslintrc.json` ，允许 `window` 和 `document` 等浏览器对象的使用。
 
 ```json
 "env": {
@@ -42,9 +42,9 @@ If you run ESLint on this file, it will complain about `document` being undefine
 }
 ```
 
-Alright, we now need to bundle this ES6 client app into an ES5 bundle.
+现在，需要把我们用 ES6 写的客户端代码打包成 ES5 文件。
 
-- Create a `webpack.config.babel.js` file containing:
+- 创建 `webpack.config.babel.js` ：
 
 ```js
 // @flow
@@ -78,23 +78,23 @@ export default {
 }
 ```
 
-This file is used to describe how our bundle should be assembled: `entry` is the starting point of our app, `output.filename` is the name of the bundle to generate, `output.path` and `output.publicPath` describe the destination folder and URL. We put the bundle in a `dist` folder, which will contain things that are generated automatically (unlike the declarative CSS we created earlier which lives in `public`). `module.rules` is where you tell Webpack to apply some treatment to some type of files. Here we say that we want all `.js` and `.jsx` (for React) files except the ones in `node_modules` to go through something called `babel-loader`. We also want these two extensions to be used to `resolve` modules when we `import` them. Finally, we declare a port for Webpack Dev Server.
+这个文件是用来描述如何打包：`entry` 是我们 app 的入口，`output.filename` 是最终生成的打包文件名，`output.path` 和 `output.publicPath` 代表最终文件夹和 URL 地址。最终自动生成的内容会被打包进 `dist` 文件夹。`module.rules` 告诉 Webpack 对匹配到的文件进行何种操作。比如，我们要求 Webpack 用 `babel-loader` 来处理 `.js` 和 `.jsx` 文件; `node_modules` 文件里的内容不需要处理。`resolve` 指明 Webpack 自动识别哪些后缀 —— 当我们用 `import` 导入的时候，文件的扩展名就可以省略了。最后，我们声明了 Webpack 开发服务器的端口。
 
-**Note**: The `.babel.js` extension is a Webpack feature to apply our Babel transformations to this config file.
+**注意**: `.babel.js` 扩展名利用了 Webpack 的一个特点：有这个扩展名的配置文件，会自动应用 Babel 转换，所以我们可以在配置文件中使用 ES6 语法。
 
-`babel-loader` is a plugin for Webpack that transpiles your code just like we've been doing since the beginning of this tutorial. The only difference is that this time, the code will end up running in the browser instead of your server.
+`babel-loader` 是 Webpack 用来转换 ES6 代码的一个插件。我们在教程开头就做过转换代码的操作，不过这一次，代码需要运行在浏览器上，而不是跑在服务器上。
 
-- Run `yarn add --dev webpack webpack-dev-server babel-core babel-loader`
+- 运行 `yarn add --dev webpack webpack-dev-server babel-core babel-loader`
 
-`babel-core` is a peer-dependency of `babel-loader`, so we installed it as well.
+`babel-core` 是 `babel-loader` 的一个依赖。
 
-- Add `/dist/` to your `.gitignore`
+- 把 `/dist/` 添加到 `.gitignore`
 
-### Tasks update
+### 更新任务
 
-In development mode, we are going to use `webpack-dev-server` to take advantage of Hot Module Reloading (later in this chapter), and in production we'll simply use `webpack` to generate bundles. In both cases, the `--progress` flag is useful to display additional information when Webpack is compiling your files. In production, we'll also pass the `-p` flag to `webpack` to minify our code, and the `NODE_ENV` variable set to `production`.
+为了在开发环境中使用热更新技术，我们需要用到 `webpack-dev-server`；在生产环境中，我们用到的则是 `webpack` 生成的包。无论在开发环境还是生产环境，`--progress` 都应该加上 —— 它会在命令行展示 Webpack 的运行状况。在生产环境，为了压缩代码，还应该加上 `-p`，并且把 `NODE_ENV` 的值设为 `production`。
 
-Let's update our `scripts` to implement all this, and improve some other tasks as well:
+`scripts` 修改后：
 
 ```json
 "scripts": {
@@ -111,11 +111,11 @@ Let's update our `scripts` to implement all this, and improve some other tasks a
 },
 ```
 
-In `dev:start` we explicitly declare file extensions to monitor, `.js` and `.jsx`, and add `dist` in the ignored directories.
+`dev:start` 会监听 `.js` 和 `.jsx` 文件的更新，但会忽略  `dist` 文件夹下的更新。
 
-We created a separate `lint` task and added `webpack.config.babel.js` to the files to lint.
+`lint` 任务同时负责检查 `webpack.config.babel.js` 文件的代码规范。
 
-- Next, let's create the container for our app in `src/server/render-app.js`, and include the bundle that will be generated:
+- 接下来，在 `src/server/render-app.js` 中，为我们的 app 创建一个容器并导出。
 
 ```js
 // @flow
@@ -140,38 +140,39 @@ const renderApp = (title: string) =>
 export default renderApp
 ```
 
-Depending on the environment we're in, we'll include either the Webpack Dev Server bundle, or the production bundle. Note that the path to Webpack Dev Server's bundle is *virtual*, `dist/js/bundle.js` is not actually read from your hard drive in development mode. It's also necessary to give Webpack Dev Server a different port than your main web port.
+如果是在开发环境，引用的就是 Webpack 服务器的代码；如果是生产环境，引用的则是 Webpack 打包后的代码。注意，在开发模式下，Webpack 服务器的包是 *虚拟的*，`dist/js/bundle.js` 不是从硬盘里读出来的，而是存储于内存中。Webpack 服务器的端口号应该和主服务器的端口号保持不同。
 
-- Finally, in `src/server/index.js`, tweak your `console.log` message like so:
+
+- 最后，在 `src/server/index.js` 中，把 `console.log` 信息修改成：
 
 ```js
 console.log(`Server running on port ${WEB_PORT} ${isProd ? '(production)' :
   '(development).\nKeep "yarn dev:wds" running in an other terminal'}.`)
 ```
 
-That will give other developers a hint about what to do if they try to just run `yarn start` without Webpack Dev Server.
+如果开发者运行了 `yarn start`，但忘记启动 Webpack 服务器，上面的 Log 信息给出了足够的提示。
 
-Alright that was a lot of changes, let's see if everything works as expected:
+我们改的东西够多了，让我们来看看运行是否成功：
 
-🏁 Run `yarn start` in a terminal. Open an other terminal tab or window, and run `yarn dev:wds` in it. Once Webpack Dev Server is done generating the bundle and its sourcemaps (which should both be ~600kB files) and both processes hang in your terminals, open `http://localhost:8000/` and you should see "Hello Webpack!". Open your Chrome console, and under the Source tab, check which files are included. You should only see `static/css/style.css` under `localhost:8000/`, and have all your ES6 source files under `webpack://./src`. That means sourcemaps are working. In your editor, in `src/client/index.js`, try changing `Hello Webpack!` into any other string. As you save the file, Webpack Dev Server in your terminal should generate a new bundle and the Chrome tab should reload automatically.
+🏁 命令行运行 `yarn start`，打开另一个窗口，运行 `yarn dev:wds` 。等 Webpack 打完包并且生成好 sourcemaps (连文件应该都在 600kB 左右)，浏览器访问 `http://localhost:8000/`，看到的该是 "Hello Webpack!"。打开 Chrome 开发者模式，在 Source 面板下，看看哪些文件被引入了。`localhost:8000/` 域名下只有 `static/css/style.css` 文件；所有 ES 代码都属于 `webpack://./src`。这说明 sourcemaps 没出错。编辑 `src/client/index.js`，把 `Hello Webpack!` 改成其他的字符串；你一保存修改，Webpack 服务器就会生成一个新的包，Chrome 也会自动重新加载。
 
-- Kill the previous processes in your terminals with Ctrl+C, then run `yarn prod:build`, and then `yarn prod:start`. Open `http://localhost:8000/` and you should still see "Hello Webpack!". In the Source tab of the Chrome console, you should this time find `static/js/bundle.js` under `localhost:8000/`, but no `webpack://` sources. Click on `bundle.js` to make sure it is minified. Run `yarn prod:stop`.
+- Ctrl+C 关掉进程，运行 `yarn prod:build` 后再运行 `yarn prod:start`。 浏览器打开 `http://localhost:8000/`，查看 Source 面板。现在 `static/js/bundle.js` 应该是属于 `localhost:8000/`，而不是 `webpack://` 了。浏览 `bundle.js`，看看代码是否已经压缩了。使用 `yarn prod:stop` 来结束进程。
 
-Good job, I know this was quite dense. You deserve a break! The next section is easier.
+干的漂亮！这部分内容有点多，你可以休息下~接下来的内容，相对简单一些。
 
-**Note**: I would recommend to have at least 3 terminals open, one for your Express server, one for the Webpack Dev Server, and one for Git, tests, and general commands like installing packages with `yarn`. Ideally, you should split your terminal screen in multiple panes to see them all.
+**注意**：我建议至少打开三个命令行窗口，一个用来运行 Express 服务器，一个用来运行 Webpack 服务器，另一个用来操作 Git，测试和其他常规操作（比如用 `yarn` 安装包）。
 
 ## React
 
-> 💡 **[React](https://facebook.github.io/react/)** is a library for building user interfaces by Facebook. It uses the **[JSX](https://facebook.github.io/react/docs/jsx-in-depth.html)** syntax to represent HTML elements and components while leveraging the power of JavaScript.
+> 💡 **[React](https://facebook.github.io/react/)** 是 Facebook 提供的一个构建前端页面的库。 **[JSX](https://facebook.github.io/react/docs/jsx-in-depth.html)** 语法让我们能够在 JS 里创建 HTML 元素和组件。
 
-In this section we are going to render some text using React and JSX.
+本节，我们会用 React 和 JSX 来简单渲染一些文本。
 
-First, let's install React and ReactDOM:
+首先，安装 React 和 ReactDOM：
 
-- Run `yarn add react react-dom`
+- 运行 `yarn add react react-dom`
 
-Rename your `src/client/index.js` file into `src/client/index.jsx` and write some React code in it:
+把 `src/client/index.js` 文件重命名为 `src/client/index.jsx` ，并修改代码：
 
 ```js
 // @flow
@@ -187,7 +188,7 @@ import { APP_CONTAINER_SELECTOR } from '../shared/config'
 ReactDOM.render(<App />, document.querySelector(APP_CONTAINER_SELECTOR))
 ```
 
-- Create a `src/client/app.jsx` file containing:
+- 创建 `src/client/app.jsx` ：
 
 ```js
 // @flow
@@ -199,9 +200,9 @@ const App = () => <h1>Hello React!</h1>
 export default App
 ```
 
-Since we use the JSX syntax here, we have to tell Babel that it needs to transform it with the `babel-preset-react` preset. And while we're at it, we're also going to add a Babel plugin called `flow-react-proptypes` which automatically generates PropTypes from Flow annotations for your React components.
+既然我们用了 JSX 语法，我们就要通知 Babel 用 `babel-preset-react` 来进行转换；为了对 React 组件进行类型检查，我们需要安装 `flow-react-proptypes` 插件。
 
-- Run `yarn add --dev babel-preset-react babel-plugin-flow-react-proptypes` and edit your `.babelrc` file like so:
+- 运行 `yarn add --dev babel-preset-react babel-plugin-flow-react-proptypes`， 然后修改 `.babelrc`：
 
 ```json
 {
@@ -216,19 +217,19 @@ Since we use the JSX syntax here, we have to tell Babel that it needs to transfo
 }
 ```
 
-🏁 Run `yarn start` and `yarn dev:wds` and hit `http://localhost:8000`. You should see "Hello React!".
+🏁 运行 `yarn start` 和 `yarn dev:wds`，浏览器中访问 `http://localhost:8000`，应该看到 "Hello React!"。
 
-Now try changing the text in `src/client/app.jsx` to something else. Webpack Dev Server should reload the page automatically, which is pretty neat, but we are going to make it even better.
+修改 `src/client/app.jsx` 中的文本，Webpack 会自动重新加载页面；这已经非常简单了，但接下来，我们要做得更好。
 
-## Hot Module Replacement
+## Hot Module Replacement（热替换）
 
-> 💡 **[Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/)** (*HMR*) is a powerful Webpack feature to replace a module on the fly without reloading the entire page.
+> 💡 **[Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/)** (*HMR*) —— 不用重新加载全部资源，就能进行实时更新。
 
-To make HMR work with React, we are going to need to tweak a few things.
+为了搭配 HMR 使用 React，我们需要做一些小调整
 
-- Run `yarn add react-hot-loader@next`
+- 运行 `yarn add react-hot-loader@next`
 
-- Edit your `webpack.config.babel.js` like so:
+- 修改 `webpack.config.babel.js` ：
 
 ```js
 import webpack from 'webpack'
@@ -250,7 +251,7 @@ plugins: [
 ],
 ```
 
-- Edit your `src/client/index.jsx` file:
+- 修改 `src/client/index.jsx` ：
 
 ```js
 // @flow
@@ -283,10 +284,10 @@ if (module.hot) {
 }
 ```
 
-We need to make our `App` a child of `react-hot-loader`'s `AppContainer`, and we need to `require` the next version of our `App` when hot-reloading. To make this  process clean and DRY, we create a little `wrapApp` function that we use in both places it needs to render `App`. Feel free to move the `eslint-disable global-require` to the top of the file to make this more readable.
+`App` 必须是 `react-hot-loader` 导出的 `AppContainer` 的一个子元素；热更新的时候，我们需要把 `App` 的最新版本 `require`。为了保持代码整洁和 DRY，我们创建了一个名为 `wrapApp` 的方法；在两处需要渲染 `App` 的地方，都用到了这个方法。处于代码可读性的考虑，你可以把 `eslint-disable global-require` 写在该文件的最顶部。
 
-🏁 Restart your `yarn dev:wds` process if it was still running. Open `localhost:8000`. In the Console tab, you should see some logs about HMR. Go ahead and change something in `src/client/app.jsx` and your changes should be reflected in your browser after a few seconds, without any full-page reload!
+🏁 重启 `yarn dev:wds` 进程并在浏览器访问 `localhost:8000`。在开发者模式下，你会在浏览器输出了一些和 HMR 相关的日志。随便修改点 `src/client/app.jsx` 文件中的内容，你的修改会很快投射到浏览器中，并且，页面没有刷新。
 
-Next section: [05 - Redux, Immutable, Fetch](05-redux-immutable-fetch.md#readme)
+下一章： [05 - Redux, Immutable, Fetch](05-redux-immutable-fetch.md#readme)
 
-Back to the [previous section](03-express-nodemon-pm2.md#readme) or the [table of contents](https://github.com/verekia/js-stack-from-scratch#table-of-contents).
+回到 [上一章](03-express-nodemon-pm2.md#readme) 或者 [目录](https://github.com/verekia/js-stack-from-scratch#table-of-contents).
