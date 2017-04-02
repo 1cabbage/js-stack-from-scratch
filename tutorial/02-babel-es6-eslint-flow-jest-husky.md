@@ -2,22 +2,22 @@
 
 本章代码在 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/02-babel-es6-eslint-flow-jest-husky)。
 
-我们将在本章使用 ES6 语法，与 ES5 语法相比，它更加优雅。几乎所有的浏览器和 JS 运行环境都能理解 ES5，但却不能很好地运行 ES6。为此，一个名为 Babel 的工具应运而生。
+我们将在本章使用 ES6 语法，与 ES5 语法相比，它更加优雅。几乎所有的浏览器和 JS 环境都能理解 ES5，但 ES6 还没有得到广泛支持。为此，一个名为 Babel 的工具应运而生。
 
 ## Babel
 
-> 💡 **[Babel](https://babeljs.io/)** 是一个将 ES6 代码 转换为 ES5 代码的编译器（一些其他语法，比如 JSX 语法也能够被编译）。 它非常模块化，可悲运用于各种 [环境](https://babeljs.io/docs/setup/)。目前为止，它是 React 社区最受推崇的 ES5 编译器。
+> 💡 **[Babel](https://babeljs.io/)** 是一个将 ES6 代码 转换为 ES5 代码的编译器（一些其他语法，比如 JSX 语法也能够被编译）。 它非常模块化，可被运用于各种 [环境](https://babeljs.io/docs/setup/)。目前为止，它是 React 社区最受推崇的 ES5 编译器。
 
-- 把 `index.js` 移动到新创建的 `src` 文件夹下。 在该文件夹下，使用 ES6 语法。 删除和 `color` 有关的代码，用下面的内容替换：
+- 把 `index.js` 移动到新创建的 `src` 文件夹下。 在该文件夹下的文件，使用 ES6 语法。 删除和 `color` 有关的代码，用下面的内容替换：
 
 ```js
 const str = 'ES6'
 console.log(`Hello ${str}`)
 ```
 
-我们这里使用的 ES6 语法是 *模板字符串*，它允许我们在字符串中通过 `${}` 插入变量。注意模板语法使用 **反引号**.
+我们这里使用的 ES6 语法是 *模板字符串*，它允许我们在字符串中通过 `${}` 来插入变量。注意模板语法使用 **反引号**.
 
-- 运行 `yarn add --dev babel-cli` Babel CLI（命令行工具）。
+- 运行 `yarn add --dev babel-cli` 安装 Babel CLI（命令行工具）。
 
 Babel CLI 有 [两种执行方式](https://babeljs.io/docs/usage/cli/): `babel`，将 ES6 文件转换为 ES5 文件； `babel-node` 可以替换 `node`，用来轻量级地直接执行 ES6 文件。 `babel-node` 适用于开发，但对于生产环境来说，它太笨重了。在本章中，我们使用 `babel-node` 来配置开发环境；接下来，我们将使用 `babel` 来为生产环境打包 ES5 文件。
 
