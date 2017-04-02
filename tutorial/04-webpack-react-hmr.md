@@ -4,7 +4,7 @@
 
 ## Webpack
 
-> 💡 **[Webpack](https://webpack.js.org/)** 是一个 *用来打包的模块*。它能把各种各样的文件打包进同一个文件（通常情况下是这样）内，你只需要引用这一个文件就可以。
+> 💡 **[Webpack](https://webpack.js.org/)** 是一个 *用来打包的模块*。它能把各种各样的文件打包进一个文件（通常情况下是这样）内，你只需要引用这一个文件就可以。
 
 下面是一个用 Webpack 来打包的 *hello world* 示例。
 
@@ -31,7 +31,7 @@ document.querySelector(APP_CONTAINER_SELECTOR).innerHTML = '<h1>Hello Webpack!</
 
 - 运行 `yarn add babel-polyfill`
 
-如果先在运行 ESLint，应该有错误提示 `document` 未定义。
+如果现在运行 ESLint，应该有错误提示 `document` 未定义。
 
 - 修改 `.eslintrc.json` ，允许 `window` 和 `document` 等浏览器对象的使用。
 
@@ -78,7 +78,7 @@ export default {
 }
 ```
 
-这个文件是用来描述如何打包：`entry` 是我们 app 的入口，`output.filename` 是最终生成的打包文件名，`output.path` 和 `output.publicPath` 代表最终文件夹和 URL 地址。最终自动生成的内容会被打包进 `dist` 文件夹。`module.rules` 告诉 Webpack 对匹配到的文件进行何种操作。比如，我们要求 Webpack 用 `babel-loader` 来处理 `.js` 和 `.jsx` 文件; `node_modules` 文件里的内容不需要处理。`resolve` 指明 Webpack 自动识别哪些后缀 —— 当我们用 `import` 导入的时候，文件的扩展名就可以省略了。最后，我们声明了 Webpack 开发服务器的端口。
+这个文件描述如何打包：`entry` 是我们 app 的入口，`output.filename` 是最终生成的打包文件名，`output.path` 和 `output.publicPath` 代表最终文件夹和 URL 地址。最终自动生成的内容会被打包进 `dist` 文件夹。`module.rules` 告诉 Webpack 对匹配到的文件进行何种操作。比如，我们要求 Webpack 用 `babel-loader` 来处理 `.js` 和 `.jsx` 文件; `node_modules` 文件夹里的内容不需要处理。`resolve` 指明 Webpack 自动识别哪些后缀 —— 当我们用 `import` 导入的时候，文件的扩展名就可以省略了。最后，我们声明了 Webpack 开发服务器的端口。
 
 **注意**: `.babel.js` 扩展名利用了 Webpack 的一个特点：有这个扩展名的配置文件，会自动应用 Babel 转换，所以我们可以在配置文件中使用 ES6 语法。
 
@@ -92,7 +92,7 @@ export default {
 
 ### 更新任务
 
-为了在开发环境中使用热更新技术，我们需要用到 `webpack-dev-server`；在生产环境中，我们用到的则是 `webpack` 生成的包。无论在开发环境还是生产环境，`--progress` 都应该加上 —— 它会在命令行展示 Webpack 的运行状况。在生产环境，为了压缩代码，还应该加上 `-p`，并且把 `NODE_ENV` 的值设为 `production`。
+为了在开发环境中使用热替换技术，我们需要用到 `webpack-dev-server`；在生产环境中，我们用到的则是 `webpack` 生成的包。无论在开发环境还是生产环境，`--progress` 都应该加上 —— 它会在命令行展示 Webpack 的运行状况。在生产环境，为了压缩代码，还应该加上 `-p`，并且把 `NODE_ENV` 的值设为 `production`。
 
 `scripts` 修改后：
 
@@ -111,9 +111,9 @@ export default {
 },
 ```
 
-`dev:start` 会监听 `.js` 和 `.jsx` 文件的更新，但会忽略  `dist` 文件夹下的更新。
+`dev:start` 会监听 `.js` 和 `.jsx` 文件的更新，但会忽略 `dist` 文件夹下的更新。
 
-`lint` 任务同时负责检查 `webpack.config.babel.js` 文件的代码规范。
+`lint` 任务还会检查 `webpack.config.babel.js` 文件的代码规范。
 
 - 接下来，在 `src/server/render-app.js` 中，为我们的 app 创建一个容器并导出。
 
@@ -154,7 +154,7 @@ console.log(`Server running on port ${WEB_PORT} ${isProd ? '(production)' :
 
 我们改的东西够多了，让我们来看看运行是否成功：
 
-🏁 命令行运行 `yarn start`，打开另一个窗口，运行 `yarn dev:wds` 。等 Webpack 打完包并且生成好 sourcemaps (连文件应该都在 600kB 左右)，浏览器访问 `http://localhost:8000/`，看到的该是 "Hello Webpack!"。打开 Chrome 开发者模式，在 Source 面板下，看看哪些文件被引入了。`localhost:8000/` 域名下只有 `static/css/style.css` 文件；所有 ES 代码都属于 `webpack://./src`。这说明 sourcemaps 没出错。编辑 `src/client/index.js`，把 `Hello Webpack!` 改成其他的字符串；你一保存修改，Webpack 服务器就会生成一个新的包，Chrome 也会自动重新加载。
+🏁 命令行运行 `yarn start`，打开另一个命令行窗口，运行 `yarn dev:wds` 。等 Webpack 打完包并且生成好 sourcemaps (两个文件应该都在 600kB 左右)，浏览器访问 `http://localhost:8000/`，看到的该是 "Hello Webpack!"。打开 Chrome 开发者模式，在 Source 面板下，看看哪些文件被引入了。`localhost:8000/` 域名下只有 `static/css/style.css` 文件；所有 ES 代码都属于 `webpack://./src`。这说明 sourcemaps 没出错。编辑 `src/client/index.js`，把 `Hello Webpack!` 改成其他的字符串；你一保存修改，Webpack 服务器就会生成一个新的包，Chrome 也会自动重新加载。
 
 - Ctrl+C 关掉进程，运行 `yarn prod:build` 后再运行 `yarn prod:start`。 浏览器打开 `http://localhost:8000/`，查看 Source 面板。现在 `static/js/bundle.js` 应该是属于 `localhost:8000/`，而不是 `webpack://` 了。浏览 `bundle.js`，看看代码是否已经压缩了。使用 `yarn prod:stop` 来结束进程。
 
@@ -284,9 +284,9 @@ if (module.hot) {
 }
 ```
 
-`App` 必须是 `react-hot-loader` 导出的 `AppContainer` 的一个子元素；热更新的时候，我们需要把 `App` 的最新版本 `require`。为了保持代码整洁和 DRY，我们创建了一个名为 `wrapApp` 的方法；在两处需要渲染 `App` 的地方，都用到了这个方法。处于代码可读性的考虑，你可以把 `eslint-disable global-require` 写在该文件的最顶部。
+`App` 必须是 `react-hot-loader` 导出的 `AppContainer` 的一个子元素；热更新的时候，我们需要把 `App` 的最新版本重新 `require`。为了保持代码整洁和 DRY，我们创建了一个名为 `wrapApp` 的方法；在两处需要渲染 `App` 的地方，都用到了这个方法。出于代码可读性的考虑，你可以把 `eslint-disable global-require` 写在该文件的最顶部。
 
-🏁 重启 `yarn dev:wds` 进程并在浏览器访问 `localhost:8000`。在开发者模式下，你会在浏览器输出了一些和 HMR 相关的日志。随便修改点 `src/client/app.jsx` 文件中的内容，你的修改会很快投射到浏览器中，并且，页面没有刷新。
+🏁 重启 `yarn dev:wds` 进程并在浏览器访问 `localhost:8000`。在开发者模式下，你会看到浏览器输出了一些和 HMR 相关的日志。随便修改点 `src/client/app.jsx` 文件中的内容，你的修改会很快投射到浏览器中，并且页面没有刷新。
 
 下一章： [05 - Redux, Immutable, Fetch](05-redux-immutable-fetch.md#readme)
 
