@@ -23,9 +23,9 @@ Babel CLI 有 [两种执行方式](https://babeljs.io/docs/usage/cli/): `babel`�
 
 - 在 `package.json`  `start` 脚本中, 用 `babel-node src` 来替换 `node .` (`index.js` 是 Node 默认执行的文件，因此我们可以省略 `index.js`)。
 
-如果你现在运行 `yarn start` ，输出应该没啥问题；不过 Babel 这时候并起到什么作用。这是因为我们没有告诉 Babel 我们需要进行何种转换。输出正确的唯一原因是 Node 原生支持了 ES6 语法。然而，某些浏览器以及老版本的 Node 却不支持这些最新的语法。
+如果你现在运行 `yarn start` ，输出应该没啥问题；不过 Babel 这时候并起到什么作用。因为我们还没有告诉 Babel 进行何种转换。输出正确的唯一原因是 Node 原生支持了 ES6 语法。然而，某些浏览器以及老版本的 Node 却不一定支持这些最新的语法。
 
-- 运行 `yarn add --dev babel-preset-env` 来安装一个叫 `env` 的 Babel preset 包，它包含了大部分 Babel 支持转化的 ECMAScript 最新语法的配置。
+- 运行 `yarn add --dev babel-preset-env` 来安装一个叫 `env` 的 Babel preset 包，它包含了大部分 Babel 支持转化的 ECMAScript 语法配置。
 
 - 在根目录创建 `.babelrc` 文件，它是一个用来配置 Babel 的 JSON 文件。 添加如下内容，使 Babel 使用 `env` preset：
 
@@ -41,11 +41,11 @@ Babel CLI 有 [两种执行方式](https://babeljs.io/docs/usage/cli/): `babel`�
 
 ## ES6
 
-> 💡 **[ES6](http://es6-features.org/)**: ES6 是 JavaScript 语言最振奋人心的更新。ES6 新语法太多，我们不可能完整地罗列在这里；不过，我们会简单地介绍一下 `class`， `const` ， `let`， 字符串语法以及箭头函数 (`(text) => { console.log(text) }`)。
+> 💡 **[ES6](http://es6-features.org/)**: ES6 是 JavaScript 最振奋人心的更新。ES6 新语法太多，我们不可能完整地罗列在这里；不过，我们会简单地介绍一下 `class`， `const` ， `let`， 字符串语法以及箭头函数 (`(text) => { console.log(text) }`)。
 
 ### 创建 ES6 class
 
-- 创建一个新文件 `src/dog.js`， 使用了 ES6 class 语法：
+- 创建一个新文件 `src/dog.js`，使用 ES6 class 语法：
 
 ```js
 class Dog {
@@ -79,21 +79,19 @@ console.log(toby.bark())
 
 ### ES6 模块语法
 
+我们将用 `import Dog from './dog'` 来替换 `const Dog = require('./dog')`，这是最新的 ES6 模块语法(和 "CommonJS" 模块与法相对应)。但现在 NodeJS 还并不支持这种语法，所以如果代码仍能正常运行的话，就说明 Babel 确实正确处理了我们的代码。
 
+同时，在 `dog.js` 文件中, 用 `export default Dog` 替换 `module.exports = Dog` 。
 
-我们将用 `import Dog from './dog'` 来替换 `const Dog = require('./dog')` , 这是最新的 ES6 模块语法(和 "CommonJS" 模块与法相对应)。 现在 NodeJS 还并不支持这种语法，所以如果代码仍能正常运行的话，就说明 Babel 确实正确处理了我们的代码。
-
- 同时，在 `dog.js` 文件中, 用 `export default Dog` 替换 `module.exports = Dog` 。
-
-🏁 `yarn start` 应该能够正常运行并输出 "Wah wah, I am Toby"。
+🏁 `yarn start` 应该能够正常运行，并输出 "Wah wah, I am Toby"。
 
 ## ESLint
 
 > 💡 **[ESLint](http://eslint.org)** 是 ES6 代码的检查器。它会根据代码规范，给出合理的提示。ESLint 给出的提示，也能帮你更好地学习 JavaScript。
 
-ESLint 需要和各种 *规范* 结合使用，[规范](http://eslint.org/docs/rules/)可不少哦。我选择的是 Airbnb 提供的代码规范。为了使用规范，我们需要先安装一些插件。
+ESLint 需要和各种 *规范* 结合使用，[规范](http://eslint.org/docs/rules/) 可不少哦。我选择的是 Airbnb 提供的代码规范。为了使用规范，我们需要先安装一些插件。
 
-查阅 Airbnb 最新 [说明](https://www.npmjs.com/package/eslint-config-airbnb)，安装配置包以及它的依赖包。 截至 2017-02-03, Airbnb 建议使用一下命令行：
+查阅 Airbnb 最新 [说明](https://www.npmjs.com/package/eslint-config-airbnb)，安装配置包以及它的依赖包。 截至 2017-02-03, Airbnb 建议使用以下命令行：
 
 ```sh
 npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs yarn add --dev eslint-config-airbnb@latest
@@ -101,9 +99,9 @@ npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\
 
 这条命令能安装好所有需要的包，并且在 `package.json` 文件中自动添加了 `eslint-config-airbnb`， `eslint-plugin-import`， `eslint-plugin-jsx-a11y` 以及 `eslint-plugin-react` 。
 
-**注意**: 我把命令中的 `npm install` 替换为 `yarn add`，然而，Windows 系统并不支持。所以如果你也这么干，请查看 `package.json` 文件，然后用 `yarn add --dev packagename@^#.#.#` 来手动安装所需要的包。 `#.#.#` 代表 `package.json` 每个包的版本号。
+**注意**: 我把命令中的 `npm install` 替换为 `yarn add`，然而，Windows 系统并不支持。所以如果你遇到了这个问题，请查看 `package.json` 文件，然后用 `yarn add --dev packagename@^#.#.#` 来手动安装所需要的包。 `#.#.#` 代表 `package.json` 每个包的版本号。
 
-- 项目根目录下，创建 `.eslintrc.json` ，并添加如下代码：
+- 项目根目录下，创建 `.eslintrc.json`，并添加如下代码：
 
 ```json
 {
@@ -126,9 +124,9 @@ npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\
 
 这条命令的意思是检测 `src` 目录下所有的 JS 文件。
 
-我们会用 `test` 任务运行一系列命令来验证我们的代码，包括类型检查和单元测试。
+我们会用 `test` 任务运行一系列命令来验证我们的代码，包括之后的类型检查和单元测试。
 
-- 运行 `yarn test`，你应该看到 `index.js` 文件中的错误有：分号缺失，使用 `console.log()` 。该文件顶部添加 `/* eslint-disable no-console */`  来允许我们在该文件中使用 `console` 。
+- 运行 `yarn test`，你应该看到 `index.js` 文件中的错误有：分号缺失，使用 `console.log()` 。该文件顶部添加 `/* eslint-disable no-console */` 来允许我们在该文件中使用 `console` 。
 
 **注意**: 如果你是 Windows 系统用户，请保证你已经设置你的 Git 和编辑器使用 Unix 的 LF 换行模式，而不是 Windows 默认的 CRLF 换行模式。如果你的项目只会跑在 Windows 上，你可以在 ESLint 配置文件的 `rules` 中添加 `"linebreak-style": [2, "windows"]` 来强制使用 CRLF 换行模式。
 
@@ -136,9 +134,9 @@ npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\
 
 这可能是 JS 社区中最容易引起撕逼的话题了，我们也来唠唠。因为 JS 的自动分号插入机制，你可以省略分号。我觉得这个问题只关个人喜好，而无关对错。如果你喜欢 Python， Ruby， 或者 Scala，你可能挺享受省略分号的写法。 但要是你喜欢的是 Java， C#， 或者 PHP，那你应该更喜欢加上分号。
 
-大多数人出于习惯会在写 JS 的时候加上分号。最开始我也是分号党，直到有一天我看了 Redux 文档中的代码示例，然后尝试了一下不写分号。刚开始的感觉有点奇怪，但只是因为不习惯；但在写了一天代码后，我就变成了一个不折不扣的无分号党。在我看来，不写分号更直观，写起来也更简单。
+大多数人出于习惯会在写 JS 的时候加上分号。最开始我也是分号党，直到有一天我看了 Redux 文档中的代码示例，然后尝试了一下不写分号。刚开始的感觉有点奇怪，但只是因为不习惯；不过在写了一天代码后，我就变成了一个不折不扣的无分号党。在我看来，不写分号更直观，写起来也更简单。
 
-我建议你读一下 [关于分号的 ESLint 文档](http://eslint.org/docs/rules/semi)。正如在文档中提到的，如果你也想成为一个无分号党，你应该知道在一些极端情况下，分号又是必要的。 ESLint 能够帮助你应对这些极端情况。你需要在  `.eslintrc.json` 中添加 `no-unexpected-multiline` 规则：
+我建议你读一下 [关于分号的 ESLint 文档](http://eslint.org/docs/rules/semi)。正如在文档中提到的，如果你也想成为一个无分号党，你应该知道在一些极端情况下，分号又是必要的。 ESLint 能够帮助你应对这些极端情况。你需要在 `.eslintrc.json` 中添加 `no-unexpected-multiline` 规则：
 
 ```json
 {
@@ -150,23 +148,23 @@ npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\
 }
 ```
 
-🏁 现在再运行 `yarn test` 就应该没什么错误提示了。在不需要分号的地方加一下分号，看看有没有错误提示。
+🏁 现在再运行 `yarn test`，就应该没什么错误提示了。在不需要分号的地方加一下分号，看看有没有错误提示。
 
-如果你们坚持使用分号，我表示理解；不过，这可能让你们使用这个教程的时候不太方便。如果你看这个教程只是为了学习一下，那我保证你在学习过程中不使用分号，是可以忍一忍的；如果你想用教程提供的模板并且是个分号党，你可能要在某些地方做些修改——有 ESLint 的提示，你改得应该也挺快的。
+如果你们坚持使用分号，我表示理解；不过，这可能让你们在使用这个教程的时候不太方便。如果你看这个教程只是为了学习一下，那我保证你在学习过程中不使用分号，是可以忍一忍的；如果你想用教程提供的模板并且是个分号党，你可能要在某些地方做些修改 —— 有了 ESLint 的提示，你改得应该也挺快的。
 
 ### Compat
 
-如果你想要你的项目支持更多的浏览器，但不知道要支持的浏览器是否支持某个 API 怎么办？用 [Compat](https://github.com/amilajack/eslint-plugin-compat)！请查看根据 [Can I Use](http://caniuse.com/) 制定的 [浏览器列表](https://github.com/ai/browserslist)
+如果你想让你的项目支持更多的浏览器，但不知道要支持的浏览器是否支持某个 API 怎么办？用 [Compat](https://github.com/amilajack/eslint-plugin-compat)！请查看根据 [Can I Use](http://caniuse.com/) 制定的 [浏览器列表](https://github.com/ai/browserslist)
 
 - 运行 `yarn add --dev eslint-plugin-compat`
 
-- 在 `package.json` 中添加如下内容，告诉插件，只要是市场占有率超过百分之一的浏览器，我们都想要支持。
+- 在 `package.json` 中添加如下内容，告诉插件，只要是市场占有率超过百分之一的浏览器，我们都想支持。
 
 ```json
 "browserslist": ["> 1%"],
 ```
 
-- 相应的， `.eslintrc.json` 文件也要做出修改：
+- 相应的，`.eslintrc.json` 文件也要做出修改：
 
 ```json
 {
@@ -192,13 +190,13 @@ npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\
 
 > 💡 **[Flow](https://flowtype.org/)**: Facebook 提供的一个静态类型检查器。举个例子，如果你把一个字符串类型的值赋值给一个数值类型的变量，它就会报错。
 
-现在，我们的 JS 代码是标准的 ES6 格式。 Flow 能够检查这样的代码，但为了发挥它的最大威力，我们要在我们的代码中加入注释；但这样，我们的代码就不那么符合标准了。为了让 Babel 和 ESLint 在解析我们的代码时不崩溃，我们需要通过配置让它们理解注释。
+现在，我们的 JS 代码是标准的 ES6 格式。Flow 能够检查这样的代码，但为了发挥它的最大威力，我们要在我们的代码中加入注释；但这样，我们的代码就不那么符合标准了。为了让 Babel 和 ESLint 在解析我们的代码时不崩溃，我们需要通过配置让它们理解注释。
 
 - 运行 `yarn add --dev flow-bin babel-preset-flow babel-eslint eslint-plugin-flowtype`
 
-`flow-bin` 是在 `scripts` 任务要用到的, `babel-preset-flow` 帮助 Babel 理解 Flow 注释， `babel-eslint` 让 ESLint *依赖于 Babel 解析器*， `eslint-plugin-flowtype` 是一个用来检查注释错误的 ESLint 插件。
+`flow-bin` 是在 `scripts` 任务中用的, `babel-preset-flow` 帮助 Babel 理解 Flow 注释， `babel-eslint` 让 ESLint *依赖于 Babel 解析器*， `eslint-plugin-flowtype` 是一个用来检查注释错误的 ESLint 插件。
 
-- 向下面这样修改 `.babelrc` 文件：
+- 像下面这样修改 `.babelrc` 文件：
 
 ```json
 {
@@ -229,7 +227,7 @@ npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\
 }
 ```
 
-**注意**: `plugin:flowtype/recommended` 已经告诉 Babel 该用什么解析器了；不过，要是你想更明确点，请尽管在 `.eslintrc.json` 加上 `"parser": "babel-eslint"` 。
+**注意**: `plugin:flowtype/recommended` 已经告诉 Babel 该用什么解析器了；不过，要是你想更明确点，可以在 `.eslintrc.json` 加上 `"parser": "babel-eslint"` 。
 
 这一节的东西好像有点多，你可以先花几分钟消化一下。我到现在还感到很惊奇，ESLint 竟然能用 Babel 的解析器来解析 Flow 的注释！这俩工具实在是太模块化了。
 
@@ -286,9 +284,9 @@ export default Dog
 
 你可以进行下面的尝试：
 
-- 在 `dog.js`文件中， 替换 `constructor(name: string)` 为 `constructor(name: number)`， 然后运行 `yarn test`。如果 **Flow** 提示类型出错，那说明 Flow 运行成功了。
+- 在 `dog.js` 文件中，替换 `constructor(name: string)` 为 `constructor(name: number)`， 然后运行 `yarn test`。如果 **Flow** 提示类型出错，那说明 Flow 运行成功了。
 
-- 替换 `constructor(name: string)` 为 `constructor(name:string)`，运行 `yarn test`。如果  **ESLint** 运行成功地话，它会提示你在冒号后应该添加一个空格。
+- 替换 `constructor(name: string)` 为 `constructor(name:string)`，运行 `yarn test`。如果  **ESLint** 运行成功地话，它会提示你在冒号后添加一个空格。
 
 🏁 如果你能得到以上两个错误，那说明你的 ESLint 和 Flow 配置成功了；记得把刚刚修改的东西改回去。
 
@@ -359,7 +357,7 @@ test('Dog.bark', () => {
 
 🏁 现在试着 commit 或者 push 代码， `test` 任务就会自动执行。
 
-如果运行出错，那一般是因为 `yarn add --dev husky` 这个命令没有正确安装 Git 钩子。我自己没遇到过这种情况，但其他运气不怎么好的遇到过。 如果你是不幸者之一，试试 `yarn add --dev husky --force`, 可以的话，记得在这里说明一下你的状况 [this issue](https://github.com/typicode/husky/issues/84)。
+如果运行出错，那一般是因为 `yarn add --dev husky` 这个命令没有正确安装 Git 钩子。我自己没遇到过这种情况，但其他运气不怎么好的人遇到过。 如果你是不幸者之一，试试 `yarn add --dev husky --force`, 可以的话，记得在这里说明一下你的状况 [this issue](https://github.com/typicode/husky/issues/84)。
 
 **注意**：如果你是在 commit 之后执行 push 操作，为了避免重复测试，你应该使用 `git push --no-verify` 命令。
 
