@@ -1,32 +1,34 @@
 # 05 - Redux, Immutable, and Fetch
 
-Code for this chapter available [here](https://github.com/verekia/js-stack-walkthrough/tree/master/05-redux-immutable-fetch).
+**注意**： 本章中的 `state`，`action`，`reducer` 等术语都不会被翻译~
 
-In this chapter we will hook up React and Redux to make a very simple app. The app will consist of a message and a button. The message changes when the user clicks the button.
+本章代码在 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/05-redux-immutable-fetch).
 
-Before we start, here is a very quick introduction to ImmutableJS, which is completely unrelated to React and Redux, but will be used in this chapter.
+本章我们会结合使用 React 和 Redux，做一个简单的示例 app。这个示例由一个信息按钮组成，当用户点击的时候，信息会改变。
+
+开始之前，我先简单地介绍一下 ImmutableJS —— 它跟 React 和 Redux 完全没关系，但我们会在本章中用到它。
 
 ## ImmutableJS
 
-> 💡 **[ImmutableJS](https://facebook.github.io/immutable-js/)** (or just Immutable) is a library by Facebook to manipulate immutable collections, like lists and maps. Any change made on an immutable object returns a new object without mutating the original object.
+> 💡 **[ImmutableJS](https://facebook.github.io/immutable-js/)** (简称 Immutable) 是 Facebook 提供的一个操作不可变集合（例如 Map 或 List）的库。更改不可变对象时，不会更改原对象，而是会返回一个新对象。
 
-For instance, instead of doing:
+举例，我们不建议这样：
 
 ```js
 const obj = { a: 1 }
 obj.a = 2 // Mutates `obj`
 ```
 
-You would do:
+我们建议这样：
 
 ```js
 const obj = Immutable.Map({ a: 1 })
-obj.set('a', 2) // Returns a new object without mutating `obj`
+obj.set('a', 2) // 返回一个新对象，没有更改 `obj`
 ```
 
-This approach follows the **functional programming** paradigm, which works really well with Redux.
+这个库和 **函数式编程** 的思想不谋而合，并让 Redux 的使用如虎添翼。
 
-When creating immutable collections, a very convenient method is `Immutable.fromJS()`, which takes any regular JS object or array and returns a deeply immutable version of it:
+创建不可变集合时，一个常用的方法是 `Immutable.fromJS()`。这个方法以 JS 对象或数组为参数，并返回一个深拷贝的不可变对象。
 
 ```js
 const immutablePerson = Immutable.fromJS({
@@ -44,17 +46,17 @@ console.log(immutablePerson)
  */
 ```
 
-- Run `yarn add immutable@4.0.0-rc.2`
+- 运行 `yarn add immutable@4.0.0-rc.2`
 
 ## Redux
 
-> 💡 **[Redux](http://redux.js.org/)** is a library to handle the lifecycle of your application. It creates a *store*, which is the single source of truth of the state of your app at any given time.
+> 💡 **[Redux](http://redux.js.org/)** 库用来管理应用的生命周期。它创建一个 *store*，作为应用中 state 的唯一源。
 
-Let's start with the easy part, declaring our Redux actions:
+从最简单的部分开始，先声明 Redux actions：
 
 - Run `yarn add redux redux-actions`
 
-- Create a `src/client/action/hello.js` file containing:
+- 创建 `src/client/action/hello.js`：
 
 ```js
 // @flow
@@ -66,9 +68,9 @@ export const SAY_HELLO = 'SAY_HELLO'
 export const sayHello = createAction(SAY_HELLO)
 ```
 
-This file exposes an *action*, `SAY_HELLO`, and its *action creator*, `sayHello`, which is a function. We use [`redux-actions`](https://github.com/acdlite/redux-actions) to reduce the boilerplate associated with Redux actions. `redux-actions` implement the [Flux Standard Action](https://github.com/acdlite/flux-standard-action) model, which makes *action creators* return objects with the `type` and `payload` attributes.
+该文件导出了一个 *action* —— `SAY_HELLO`，以及对应的 *action creator* —— `sayHello`，creator 是一个方法。我们用 [`redux-actions`](https://github.com/acdlite/redux-actions) 来处理 Redux actions。 `redux-actions` 实现了 [Flux Standard Action](https://github.com/acdlite/flux-standard-action) 模型 —— *action creators* 返回的对象包含 `type` 和 `payload` 两个属性。
 
-- Create a `src/client/reducer/hello.js` file containing:
+- 创建 `src/client/reducer/hello.js` ：
 
 ```js
 // @flow
@@ -94,19 +96,20 @@ const helloReducer = (state: Immut = initialState, action: { type: string, paylo
 export default helloReducer
 ```
 
-In this file we initialize the state of our reducer with an Immutable Map containing one property, `message`, set to `Initial reducer message`. The `helloReducer` handles `SAY_HELLO` actions by simply setting the new `message` with the action payload. The Flow annotation for `action` destructures it into a `type` and a `payload`. The `payload` can be of `any` type. It looks funky if you've never seen this before, but it remains pretty understandable. For the type of `state`, we use the `import type` Flow instruction to get the return type of `fromJS`. We rename it to `Immut` for clarity, because `state: fromJS` would be pretty confusing. The `import type` line will get stripped out like any other Flow annotation. Note the usage of `Immutable.fromJS()` and `set()` as seen before.
+上面的代码用 Immutable Map 初始化了 reducer 的 state，该 state 包含一个属性 `message`，值为 `Initial reducer message`。`helloReducer` 处理 `SAY_HELLO` actions 的方式很简单 —— 只是把 `message` 的值设置为 payload 的值。Flow 注释把 `action` 参数解构为 `type` 和 `payload`；其中，`payload` 的类型为 `any`。为了给 `state` 提供类型注释，我们用 Flow 语法 `import type` 来得到 `fromJS` 它的类型。为了保持代码清晰和可读性，我们把这个类型重命名为 `Immut`，因为要是把注释写成 `state: fromJS`，让人看着头大。`import type` 和其他的 Flow 注释一样，不会影响代码运行。注意看一下 `Immutable.fromJS()` 和 `set()` 是怎么用的；在之前那个简单的例子里，我们已经用过一次了。
+
 
 ## React-Redux
 
-> 💡 **[react-redux](https://github.com/reactjs/react-redux)** *connects* a Redux store with React components. With `react-redux`, when the Redux store changes, React components get automatically updated. They can also fire Redux actions.
+> 💡 **[react-redux](https://github.com/reactjs/react-redux)** 把 Redux store 和 React 组件的使用 *结合* 了起来。有了 `react-redux`，当 Redux store 改变的时候，React 组件就会自动更新。
 
-- Run `yarn add react-redux`
+- 运行 `yarn add react-redux`
 
-In this section we are going to create *Components* and *Containers*.
+下一节我们会创建 *Components* 和 *Containers*。
 
-**Components** are *dumb* React components, in a sense that they don't know anything about the Redux state. **Containers** are *smart* components that know about the state and that we are going to *connect* to our dumb components.
+**Components（组件）** 是有点 *傻乎乎* 的 React 组件，某种程度上来说，它们感知不到 Redux state 的更新。 **Containers** 是相对 *聪明* 的组件，它们能感知状态变化。
 
-- Create a `src/client/component/button.jsx` file containing:
+- 创建 `src/client/component/button.jsx`：
 
 ```js
 // @flow
@@ -124,9 +127,9 @@ const Button = ({ label, handleClick }: Props) =>
 export default Button
 ```
 
-**Note**: You can see a case of Flow *type alias* here. We define the `Props` type before annotating our component's destructured `props` with it.
+**注意**: 我们在这里使用了 Flow 的 *类型别名*。我们自定义了 `Props` 类型，来解构组件的 `props`。
 
-- Create a `src/client/component/message.jsx` file containing:
+- 创建 `src/client/component/message.jsx`：
 
 ```js
 // @flow
@@ -143,11 +146,14 @@ const Message = ({ message }: Props) =>
 export default Message
 ```
 
-These are examples of *dumb* components. They are logic-less, and just show whatever they are asked to show via React **props**. The main difference between `button.jsx` and `message.jsx` is that `Button` contains a reference to an action dispatcher in its props, where `Message` just contains some data to show.
+以上的例子属于 *傻乎乎* 的组件。这些组件缺乏逻辑，只会展示通过 *props（属性）* 传进来的值。`button.jsx` 和 `message.jsx` 的区别是， `Button` 组件的属性里包含了一个 action dispatcher，而 `Message` 组件只是用来展示数据。
+
+
+再强调一下，*components* 不能感知 Redux 的 **actions** 或者 app 的 **state**；所以，我们要创建 **containers**， 从而向这俩组件中传入 action dispatchers 和数据。
 
 Again, *components* don't know anything about Redux **actions** or the **state** of our app, which is why we are going to create smart **containers** that will feed the proper action dispatchers and data to these 2 dumb components.
 
-- Create a `src/client/container/hello-button.js` file containing:
+- 创建 `src/client/container/hello-button.js` ：
 
 ```js
 // @flow
@@ -168,9 +174,9 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Button)
 ```
 
-This container hooks up the `Button` component with the `sayHello` action and Redux's `dispatch` method.
+这个 container 用 `sayHello` action 和 Redux 的 `dispatch` 方法，挂载了 `Button` 组件。
 
-- Create a `src/client/container/message.js` file containing:
+- 创建 `src/client/container/message.js` ：
 
 ```js
 // @flow
@@ -186,9 +192,9 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(Message)
 ```
 
-This container hooks up the Redux's app state with the `Message` component. When the state changes, `Message` will now automatically re-render with the proper `message` prop. These connections are done via the `connect` function of `react-redux`.
+这个 container 把 Redux 的应用状态和 `Message` 组件相挂载。当装填改变， `Message` 会根据 `message` 属性自动重新渲染。组件和属性之间的联系，是通过 `react-redux` 提供的 `connect` 方法。
 
-- Update your `src/client/app.jsx` file like so:
+- 修改 `src/client/app.jsx`：
 
 ```js
 // @flow
@@ -208,9 +214,9 @@ const App = () =>
 export default App
 ```
 
-We still haven't initialized the Redux store and haven't put the 2 containers anywhere in our app yet:
+我们还没有初始化 Redux store，也还没有在 app 中应用以上两个 containers：
 
-- Edit `src/client/index.jsx` like so:
+- 修改 `src/client/index.jsx`：
 
 ```js
 // @flow
@@ -253,15 +259,15 @@ if (module.hot) {
 }
 ```
 
-Let's take a moment to review this. First, we create a *store* with `createStore`. Stores are created by passing reducers to them. Here we only have one reducer, but for the sake of future scalability, we use `combineReducers` to group all of our reducers together. The last weird parameter of `createStore` is something to hook up Redux to browser [Devtools](https://github.com/zalmoxisus/redux-devtools-extension), which are incredibly useful when debugging. Since ESLint will complain about the underscores in `__REDUX_DEVTOOLS_EXTENSION__`, we disable this ESLint rule. Next, we conveniently wrap our entire app inside `react-redux`'s `Provider` component thanks to our `wrapApp` function, and pass our store to it.
+花点时间 review 一下我们的代码。首先，用 `createStore` 方法, 以 reducers 为参数，创建了一个 *store*。我们现在只有一个 reducer，但为了未来代码的扩展性，我们用 `combineReducers` 方法把 reducers 组成了一个集合。该最后一个参数，是用来把 Redux 绑定到浏览器的 [开发工具](https://github.com/zalmoxisus/redux-devtools-extension) —— debug 的时候很有用。因为 `__REDUX_DEVTOOLS_EXTENSION__` 的下划线，ESLint 会报错，所以在这一行我们禁用了下划线规则。利用我们之前写的 `wrapApp` 方法，可以非常容易的把 app 包裹在 `Provider` 组件中，并向其中传入 store。
 
-🏁 You can now run `yarn start` and `yarn dev:wds` and hit `http://localhost:8000`. You should see "Initial reducer message" and a button. When you click the button, the message should change to "Hello!". If you installed the Redux Devtools in your browser, you should see the app state change over time as you click on the button.
+🏁 现在可以用运行 `yarn start` 和 `yarn dev:wds`，然后打开 `http://localhost:8000`。页面内容是 "Initial reducer message" 和一个按钮。点击按钮，信息会变成 "Hello!"。如果你的浏览器安装了 Redux 开发者插件，就能更清楚的看到 app 的状态变化了。
 
-Congratulations, we finally made an app that does something! Okay it's not a *super* impressive from the outside, but we all know that it is powered by one badass stack under the hood.
+恭喜！我们的 app 现在看起来终于有点像那么回事了。虽然表面上看这个 app 没什么厉害的地方，但我们知道，在底层，它是由一个相当牛逼的技术栈作支撑的。
 
-## Extending our app with an asynchronous call
+## 用异步请求来拓展 app
 
-We are now going to add a second button to our app, which will trigger an AJAX call to retrieve a message from the server. For the sake of demonstration, this call will also send some data, the hard-coded number `1234`.
+接下来，我们要添加一个新按钮；点击这个按钮，会发出一个 AJAX 请求。仅作示例，这个请求会发送一个数据，然后服务器会返回硬编码的 `1234`。
 
 ### The server endpoint
 
@@ -274,16 +280,16 @@ We are now going to add a second button to our app, which will trigger an AJAX c
 export const helloEndpointRoute = (num: ?number) => `/ajax/hello/${num || ':num'}`
 ```
 
-This function is a little helper to produce the following:
+这个方法是个帮助类，这样用：
 
 ```js
 helloEndpointRoute()     // -> '/ajax/hello/:num' (for Express)
 helloEndpointRoute(1234) // -> '/ajax/hello/1234' (for the actual call)
 ```
 
-Let's actually create a test real quick to make sure this thing works well.
+赶紧先测试下
 
-- Create a `src/shared/routes.test.js` containing:
+- 创建 `src/shared/routes.test.js`：
 
 ```js
 import { helloEndpointRoute } from './routes'
@@ -294,9 +300,9 @@ test('helloEndpointRoute', () => {
 })
 ```
 
-- Run `yarn test` and it should pass successfully.
+- 运行 `yarn test`
 
-- In `src/server/index.js`, add the following:
+- 在 `src/server/index.js`，添加：
 
 ```js
 import { helloEndpointRoute } from '../shared/routes'
@@ -308,9 +314,9 @@ app.get(helloEndpointRoute(), (req, res) => {
 })
 ```
 
-### New containers
+### 创建新的 containers
 
-- Create a `src/client/container/hello-async-button.js` file containing:
+- 创建 `src/client/container/hello-async-button.js` ：
 
 ```js
 // @flow
@@ -331,9 +337,9 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Button)
 ```
 
-In order to demonstrate how you would pass a parameter to your asynchronous call and to keep things simple, I am hard-coding a `1234` value here. This value would typically come from a form field filled by the user.
+这个例子只是为了说明怎样向异步请求传参数，为了简单，我传的值是硬编码的 `1234`；一般来说，这个值应该是来自用户输入。
 
-- Create a `src/client/container/message-async.js` file containing:
+- 创建 `src/client/container/message-async.js`：
 
 ```js
 // @flow
@@ -349,21 +355,21 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(MessageAsync)
 ```
 
-You can see that in this container, we are referring to a `messageAsync` property, which we're going to add to our reducer soon.
+在这个 container 中，我们引用了一个 `messageAsync` 属性，我们要在 reducer 中加入这个属性。
 
-What we need now is to create the `sayHelloAsync` action.
+现在我们需要创建 `sayHelloAsync` action。
 
 ### Fetch
 
-> 💡 **[Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)** is a standardized JavaScript function to make asynchronous calls inspired by jQuery's AJAX methods.
+> 💡 **[Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)** 是发起异步请求的标准方法，受了 jQuery AJAX 方法的启发。
 
-We are going to use `fetch` to make calls to the server from the client. `fetch` is not supported by all browsers yet, so we are going to need a polyfill. `isomorphic-fetch` is a polyfill that makes it work cross-browsers and in Node too!
+我们在向服务器发起请求的时候会用到 `fetch`，这个方法目前还没有被所有浏览器支持，所以需要 polyfill。 `isomorphic-fetch` 不单单能跨浏览器使用，甚至还能在 Node 环境使用。
 
-- Run `yarn add isomorphic-fetch`
+- 运行 `yarn add isomorphic-fetch`
 
-Since we're using `eslint-plugin-compat`, we need to indicate that we are using a polyfill for `fetch` to not get warnings from using it.
+因为使用了 `eslint-plugin-compat` 插件，为了在使用 `fetch` 时关闭不必要的警告，配置文件需作出修改：
 
-- Add the following to your `.eslintrc.json` file:
+- 修改 `.eslintrc.json`：
 
 ```json
 "settings": {
@@ -371,11 +377,11 @@ Since we're using `eslint-plugin-compat`, we need to indicate that we are using 
 },
 ```
 
-### 3 asynchronous actions
+### 3个异步 actions
 
-`sayHelloAsync` is not going to be a regular action. Asynchronous actions are usually split into 3 actions, which trigger 3 different states: a *request* action (or "loading"), a *success* action, and a *failure* action.
+`sayHelloAsync` 不是一个常规的 action。异步 actions 通常分为三部分，并触发三种状态：一个 *request（请求）* action，一个 *success（成功）* action，一个 *failure（失败）* action。（译者注：如果你用过 Promise，应该感到熟悉~）
 
-- Edit `src/client/action/hello.js` like so:
+- 编辑 `src/client/action/hello.js`：
 
 ```js
 // @flow
@@ -412,11 +418,11 @@ export const sayHelloAsync = (num: number) => (dispatch: Function) => {
 }
 ```
 
-Instead of returning an action, `sayHelloAsync` returns a function which launches the `fetch` call. `fetch` returns a `Promise`, which we use to *dispatch* different actions depending on the current state of our asynchronous call.
+`sayHelloAsync` 没返回一个 action，而是返回了一个发起 `fetch` 请求的方法。`fetch` 返回一个 `Promise`，根据异步请求的状态，这个请求会 *dispatch（分发）* 不同的 action。
 
-### 3 asynchronous action handlers
+### 3 异步 action 处理器
 
-Let's handle these different actions in `src/client/reducer/hello.js`:
+在 `src/client/reducer/hello.js` 文件中，处理不同的 actions：
 
 ```js
 // @flow
@@ -454,15 +460,15 @@ const helloReducer = (state: Immut = initialState, action: { type: string, paylo
 export default helloReducer
 ```
 
-We added a new field to our store, `messageAsync`, and we update it with different messages depending on the action we receive. During `SAY_HELLO_ASYNC_REQUEST`, we show `Loading...`. `SAY_HELLO_ASYNC_SUCCESS` updates `messageAsync` similarly to how `SAY_HELLO` updates `message`. `SAY_HELLO_ASYNC_FAILURE` gives an error message.
+在 store 中，我们添加了一个新值： `messageAsync`，收到的 action 不同，值也不同。 如果 action.type 是 `SAY_HELLO_ASYNC_REQUEST`，值设为 `Loading...`。 `SAY_HELLO_ASYNC_SUCCESS` 和 `SAY_HELLO` 处理 `message` 的方式一样。 如果是 `SAY_HELLO_ASYNC_FAILURE`，则给出错误信息。
 
 ### Redux-thunk
 
-In `src/client/action/hello.js`, we made `sayHelloAsync`, an action creator that returns a function. This is actually not a feature that is natively supported by Redux. In order to perform these async actions, we need to extend Redux's functionality with the `redux-thunk` *middleware*.
+在 `src/client/action/hello.js`，我们创建了 `sayHelloAsync`，他是一个 action creator，返回一个方法。Redux 原生并不支持这样使用。为了使用这样异步 async actions，我们用 `redux-thunk` *中间件* 来扩展 Redux 功能。
 
-- Run `yarn add redux-thunk`
+- 安装 `yarn add redux-thunk`
 
-- Update your `src/client/index.jsx` file like so:
+- 修改 `src/client/index.jsx`：
 
 ```js
 // @flow
@@ -508,9 +514,9 @@ if (module.hot) {
 }
 ```
 
-Here we pass `redux-thunk` to Redux's `applyMiddleware` function. In order for the Redux Devtools to keep working, we also need to use Redux's `compose` function. Don't worry too much about this part, just remember that we enhance Redux with `redux-thunk`.
+我们把 `redux-thunk` 传给 Redux `applyMiddleware` 方法。为了使用 Redux 开发工具，我们还需要使用 Redux 的 `compose` 方法。别太在意这一部分，只要知道我们用 `redux-thunk` 增强了 Redux 就行了。
 
-- Update `src/client/app.jsx` like so:
+- 修改 `src/client/app.jsx`：
 
 ```js
 // @flow
@@ -534,19 +540,19 @@ const App = () =>
 export default App
 ```
 
-🏁 Run `yarn start` and `yarn dev:wds` and you should now be able to click the "Say hello asynchronously and send 1234" button and retrieve a corresponding message from the server! Since you're working locally, the call is instantaneous, but if you open the Redux Devtools, you will notice that each click triggers both `SAY_HELLO_ASYNC_REQUEST` and `SAY_HELLO_ASYNC_SUCCESS`, making the message go through the intermediate `Loading...` state as expected.
+🏁 运行 `yarn start`和 `yarn dev:wds`， 点击 "Say hello asynchronously and send 1234" 按钮，就能收到服务器返回的信息！因为你的服务器部署在本地，所以请求都是瞬间返回。要是你打开 Redux 开发工具，你就会发现每一次点击都触发了 `SAY_HELLO_ASYNC_REQUEST` and `SAY_HELLO_ASYNC_SUCCESS`；也就是说，你在浏览器里可能看不到（因为太快了），但 `Loading...` 状态确实存在过。
 
-You can congratulate yourself, that was an intense section! Let's wrap it up with some testing.
+现在可以放松一下，因为这一章的确有点难。现在做一些测试。
 
-## Testing
+## 测试
 
-In this section, we are going to test our actions and reducer. Let's start with the actions.
+这一部分，我们会测试 actions 和 reducer。从测试 actions 开始：
 
-In order to isolate the logic that is specific to `action/hello.js` we are going to need to *mock* things that don't concern it, and also mock that AJAX `fetch` request which should not trigger an actual AJAX in our tests.
+为了分离 `action/hello.js` 的代码逻辑，我们需要进行 *mock（模拟）* 一些东西；`fetch` 操作也需要模拟，测试中我们并不用真的发起 AJAX 操作。
 
-- Run `yarn add --dev redux-mock-store fetch-mock`
+- 运行 `yarn add --dev redux-mock-store fetch-mock`
 
-- Create a `src/client/action/hello.test.js` file containing:
+- 创建 `src/client/action/hello.test.js`：
 
 ```js
 import fetchMock from 'fetch-mock'
@@ -605,11 +611,11 @@ test('sayHelloAsync data error', () => {
 })
 ```
 
-Alright, Let's look at what's happening here. First we mock the Redux store using `const mockStore = configureMockStore([thunkMiddleware])`. By doing this we can dispatch actions without them triggering any reducer logic. For each test, we mock `fetch` using `fetchMock.get()` and make it return whatever we want. What we actually test using `expect()` is which series of actions have been dispatched by the store, thanks to the `store.getActions()` function from `redux-mock-store`. After each test we restore the normal behavior of `fetch` with `fetchMock.restore()`.
+上面的代码首先用 `const mockStore = configureMockStore([thunkMiddleware])` 这行代码模拟 Redux store。这样，当我们 dispatch （分发）actions 时，就不会触发 reducer 的逻辑了。每一个测试，我们都用 `fetchMock.get()` 来模拟 `fetch`，并且返回值是我们自定义的。我们真正测试的东西，是 store 分发的一系列 actions，这里，我们用到了 `redux-mock-store` 提供的 'store.getActions()' 方法。在每一次测试之后，我们用 `fetchMock.restore()` 方法来把 'fetch' 恢复到初始状态。
 
-Let's now test our reducer, which is much easier.
+reducer 的测试相对简单：
 
-- Create a `src/client/reducer/hello.test.js` file containing:
+- 创建 `src/client/reducer/hello.test.js`：
 
 ```js
 import {
@@ -653,10 +659,10 @@ test('handle SAY_HELLO_ASYNC_FAILURE', () => {
 })
 ```
 
-Before each test, we initialize `helloState` with the default result of our reducer (the `default` case of our `switch` statement in the reducer, which returns `initialState`). The tests are then very explicit, we just make sure the reducer updates `message` and `messageAsync` correctly depending on which action it received.
+每次测试之前，我们都初始化了 `helloState` 的值，把它设为 reducer 的默认返回值（ `switch` 的默认返回值是 `initialState` ）。
 
-🏁 Run `yarn test`. It should be all green.
+🏁 运行 `yarn test`，所有测试通过。
 
-Next section: [06 - React Router, Server-Side Rendering, Helmet](06-react-router-ssr-helmet.md#readme)
+下一章： [06 - React Router, Server-Side Rendering, Helmet](06-react-router-ssr-helmet.md#readme)
 
-Back to the [previous section](04-webpack-react-hmr.md#readme) or the [table of contents](https://github.com/verekia/js-stack-from-scratch#table-of-contents).
+回到 [上一章](04-webpack-react-hmr.md#readme) 或者 [目录](https://github.com/verekia/js-stack-from-scratch#table-of-contents).
