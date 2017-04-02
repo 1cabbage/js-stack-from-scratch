@@ -1,43 +1,43 @@
 # 08 - Bootstrap and JSS
 
-Code for this chapter available in the [`master-no-services`](https://github.com/verekia/js-stack-boilerplate/tree/master-no-services) branch of the [JS-Stack-Boilerplate repository](https://github.com/verekia/js-stack-boilerplate).
+本章代码在 [JS-Stack-Boilerplate repository](https://github.com/verekia/js-stack-boilerplate) 的分支 [`master-no-services`](https://github.com/verekia/js-stack-boilerplate/tree/master-no-services)
 
-Alright! It's time to give our ugly app a facelift. We are going to use Twitter Bootstrap to give it some base styles. We'll then add a CSS-in-JS library to add some custom styles.
+我们的 app 有点丑，让我们用推特的 Bootstrap 加点样式来美化一下。然后我们会引入 CSS-in-JS 包来加入自定义的样式。
 
 ## Twitter Bootstrap
 
-> 💡 **[Twitter Bootstrap](http://getbootstrap.com/)** is a library of UI components.
+> 💡 **[Twitter Bootstrap](http://getbootstrap.com/)** 是一个 UI 组件库。
 
-There are 2 options to integrate Bootstrap in a React app. Both have their pros and cons:
+有两种方式把 Bootstrap 引入到你的 React app，两种引入方式都有支持者和反对者：
 
-- Using the official release, **which uses jQuery and Tether** for the behavior of its components.
-- Using a third-party library that re-implements all of Bootstrap's components in React, like [React-Bootstrap](https://react-bootstrap.github.io/) or [Reactstrap](https://reactstrap.github.io/).
+- 使用官方发布版本，**该版本使用了 jQuery 和 Tether**。
+- 使用重新实现的第三方库 [React-Bootstrap](https://react-bootstrap.github.io/) 或者 [Reactstrap](https://reactstrap.github.io/).
 
-Third-party libraries provide very convenient React components that dramatically reduce the code bloat compared to the official HTML components, and integrate greatly with your React codebase. That being said, I must say that I am quite reluctant to use them, because they will always be *behind* the official releases (sometimes potentially far behind). They also won't work with Bootstrap themes that implement their own JS. That's a pretty tough drawback considering that one major strength of Bootstrap is its huge community of designers who make beautiful themes.
+和官方版本相比，第三方库的 React 组件用起来相当简单。虽然这么说，但我本人并不太像用第三方库。因为第三方版本总是在官方版本 *之后* 发布（有时候会要隔很久才更新）。有时，第三方的库还不能和 Bootstrap 的主题相兼容，因为这些主题使用了自己的 JS。Bootstrap 的一大优点就是拥有一个庞大的设计师社区，如果这些设计者提供的主题不被第三方库支持，那实在是有点说不过去。
 
-For this reason, I'm going to make the tradeoff of integrating the official release, alongside with jQuery and Tether. One of the concerns of this approach is the file size of our bundle of course. For your information, the bundle weights about 200KB (Gzipped) with jQuery, Tether, and Bootstrap's JS included. I think that's reasonable, but if that's too much for you, you should probably consider an other option for Bootstrap, or even not using Bootstrap at all.
+因为以上原因，我做出了妥协：选择官方版本，并结合 jQuery 和 Tether 的使用。但这样的话，打包后的文件大小成了个问题 —— 打包后的文件大约 200KB （开启了 Gzipped 压缩）。我觉得这个大小还可以接受，但如果对你来说文件还是太大，那你可能需要找另一种方式来用 Bootstrap，或者干脆不选择 Bootstrap。
 
 ### Bootstrap's CSS
 
-- Delete `public/css/style.css`
+- 删除 `public/css/style.css`
 
-- Run `yarn add bootstrap@4.0.0-alpha.6`
+- 运行 `yarn add bootstrap@4.0.0-alpha.6`
 
-- Copy `bootstrap.min.css` and `bootstrap.min.css.map` from `node_modules/bootstrap/dist/css` to your `public/css` folder.
+- 从 `node_modules/bootstrap/dist/css` 把 `bootstrap.min.css` 和 `bootstrap.min.css.map` 拷贝到 `public/css` 文件夹。
 
-- Edit `src/server/render-app.jsx` like so:
+- 修改 `src/server/render-app.jsx`：
 
 ```html
 <link rel="stylesheet" href="${STATIC_PATH}/css/bootstrap.min.css">
 ```
 
-### Bootstrap's JS with jQuery and Tether
+### 结合了 jQuery 和 Tether 的 Bootstrap JS
 
-Now that we have Bootstrap's styles loaded on our page, we need the JavaScript behavior for the components.
+Bootstrap 的样式已经会在页面上加载了；为了给组件添加行为，我们需要导入 JS。
 
-- Run `yarn add jquery tether`
+- 运行 `yarn add jquery tether`
 
-- Edit `src/client/index.jsx` like so:
+- 修改 `src/client/index.jsx`：
 
 ```js
 import $ from 'jquery'
@@ -50,13 +50,13 @@ window.Tether = Tether
 require('bootstrap')
 ```
 
-That will load Bootstrap's JavaScript code.
+这样 Bootstrap 的 JavaScript 代码会被加载进来。
 
-### Bootstrap Components
+### Bootstrap 组件
 
-Alright, it's time for you to copy-paste a whole bunch of files.
+现在，你可以做一些复制粘贴的工作：
 
-- Edit `src/shared/component/page/hello-async.jsx` like so:
+- 修改 `src/shared/component/page/hello-async.jsx`：
 
 ```js
 // @flow
@@ -90,7 +90,7 @@ const HelloAsyncPage = () =>
 export default HelloAsyncPage
 ```
 
-- Edit `src/shared/component/page/hello.jsx` like so:
+- 修改 `src/shared/component/page/hello.jsx`：
 
 ```js
 // @flow
@@ -124,7 +124,7 @@ const HelloPage = () =>
 export default HelloPage
 ```
 
-- Edit `src/shared/component/page/home.jsx` like so:
+- 修改 `src/shared/component/page/home.jsx`：
 
 ```js
 // @flow
@@ -171,7 +171,7 @@ const HomePage = () =>
 export default HomePage
 ```
 
-- Edit `src/shared/component/page/not-found.jsx` like so:
+- 修改 `src/shared/component/page/not-found.jsx`：
 
 ```js
 // @flow
@@ -197,7 +197,7 @@ const NotFoundPage = () =>
 export default NotFoundPage
 ```
 
-- Edit `src/shared/component/button.jsx` like so:
+- 修改 `src/shared/component/button.jsx`：
 
 ```js
 // [...]
@@ -210,7 +210,7 @@ export default NotFoundPage
 // [...]
 ```
 
-- Create a `src/shared/component/footer.jsx` file containing:
+- 创建 `src/shared/component/footer.jsx`：
 
 ```js
 // @flow
@@ -229,7 +229,7 @@ const Footer = () =>
 export default Footer
 ```
 
-- Create a `src/shared/component/modal-example.jsx` containing:
+- 创建 `src/shared/component/modal-example.jsx`：
 
 ```js
 // @flow
@@ -257,18 +257,18 @@ const ModalExample = () =>
 export default ModalExample
 ```
 
-- Edit `src/shared/app.jsx` like so:
+- 修改 `src/shared/app.jsx`：
 
 ```js
 const App = () =>
   <div style={{ paddingTop: 54 }}>
 ```
 
-This is an example of a *React inline style*.
+这是一个 *React 行内样式* 的示例。
 
-This will translate into: `<div style="padding-top:54px;">` in your DOM. We need this style to push the content under the navigation bar, but that's what's important here. [React inline styles](https://speakerdeck.com/vjeux/react-css-in-js) are a great way to isolate your component's styles from the global CSS namespace, but it comes at a price: You cannot use some native CSS features like `:hover`, Media Queries, animations, or `font-face`. That's [one of the reasons](https://github.com/cssinjs/jss/blob/master/docs/benefits.md#compared-to-inline-styles) we're going to integrate a CSS-in-JS library, JSS, later in this chapter.
+这段代码在 DOM 中会被转换成： `<div style="padding-top:54px;">`，用来美化导航栏内容。 [React 行内样式](https://speakerdeck.com/vjeux/react-css-in-js) 把你从 CSS 全局明明空间里解放出来，让组件作用域成为可能。但是这样做也有代价：某些原生的 CSS 特点还没有被支持，比如说 `:hover`，媒体查询，动画或者 `font-face` 就不能用了。这也是我们稍后引入 CSS-in-JS， JSS 库的[原因之一](https://github.com/cssinjs/jss/blob/master/docs/benefits.md#compared-to-inline-styles)。
 
-- Edit `src/shared/component/nav.jsx` like so:
+- 修改 `src/shared/component/nav.jsx`：
 
 ```js
 // @flow
@@ -314,7 +314,7 @@ const Nav = () =>
 export default Nav
 ```
 
-There is something new here, `handleNavLinkClick`. One issue I encountered using Bootstrap's `navbar` in an SPA is that clicking on a link on mobile does not collapse the menu, and does not scroll back to the top of the page. This is a great opportunity to show you an example of how you would integrate some jQuery / Bootstrap-specific code in your app:
+这里添加了点新东西：`handleNavLinkClick`。在开发 SPA(单页面应用)时，我用 Bootstrap 的 `navbar` 遇到了一个问题：在手机上，点击链接的时候，菜单栏不会这贴，而且没有滚动到页面顶部。 这正好给我个机会，好向你演示一下怎样在你的 app 中结合使用 jQuery 和 Bootstrap 的某些代码
 
 ```js
 import $ from 'jquery'
@@ -328,49 +328,49 @@ const handleNavLinkClick = () => {
 <NavLink /* [...] */ onClick={handleNavLinkClick}>
 ```
 
-**Note**: I've removed accessibility-related attributes (like `aria` attributes) to make the code more readable *in the context of this tutorial*. **You should absolutely put them back**. Refer to Bootstrap's documentation and code samples to see how to use them.
+**注意**: 为了 *本教程代码* 的可读性，我移除了一些易访问性相关的属性 (比如 `aria` 属性)。在实际开发时，**你当然应该把这些属性加回来**。阅读 Bootstrap 文档和代码示例，研究下怎么使用它们。
 
-🏁 Your app should now be entirely styled with Bootstrap.
+🏁 现在你的 app 终于用了 Bootstrap 的样式。
 
-## The current state of CSS
+## CSS 发展现状
 
-In 2016, the typical modern JavaScript stack settled. The different libraries and tools this tutorial made you set up are pretty much the *cutting-edge industry standard* (*cough – even though it could become completely outdated in a year from now – cough*). Yes, that's a complex stack to set up, but at least, most front-end devs agree that React-Redux-Webpack is the way to go. Now regarding CSS, I have some pretty bad news. Nothing settled, there is no standard way to go, no standard stack.
+2016 年的 JavaScript 技术栈之争已经尘埃落定。在本教程中使用到的库和工具应该能让你站在 *工业标准的前沿阵地*（*然而 —— 及时是这样，本教程还是可能在一年后完全过时 —— O__O*）。必须承认，这个技术栈设置起来有点复杂，但是，至少大多是前端开发者认为 React-Redux-Webpack 是前端的发展方向。说道 CSS，我就有点悲观了 —— 什么都没定下来，没有标准化的方向，也没有标准的技术栈。
 
-SASS, BEM, SMACSS, SUIT, Bass CSS, React Inline Styles, LESS, Styled Components, CSSX, JSS, Radium, Web Components, CSS Modules, OOCSS, Tachyons, Stylus, Atomic CSS, PostCSS, Aphrodite, React Native for Web, and many more that I forget are all different approaches or tools to get the job done. They all do it well, which is the problem, there is no clear winner, it's a big mess.
+SASS， BEM， SMACSS， SUIT， Bass CSS， React Inline Styles， LESS， Styled Components， CSSX， JSS， Radium， Web Components， CSS Modules， OOCSS， Tachyons， Stylus， Atomic CSS， PostCSS， Aphrodite， React Native for Web（都是术语，就不翻译啦 O——0 ），还有很多我已经忘了名字，不过照样能完成工作的工具。这些工具都很棒，但问题是，没有一种工具占压倒性优势，这就让人头大了。
 
-The cool React kids tend to favor React inline styles, CSS-in-JS, or CSS Modules approaches though, since they integrate really well with React and solve programmatically many [issues](https://speakerdeck.com/vjeux/react-css-in-js) that regular CSS approaches struggle with.
+React 党偏爱行内样式，CSS-in-JS 或者 CSS Modules，因为这些工具能和 React 组合得完美无瑕；而且还能用编程的方式来解决 CSS 的一些常见 [问题](https://speakerdeck.com/vjeux/react-css-in-js)。
 
-CSS Modules work well, but they don't leverage the power of JavaScript and its many features over CSS. They just provide encapsulation, which is fine, but React inline styles and CSS-in-JS take styling to an other level in my opinion. My personal suggestion would be to use React inline styles for common styles (that's also what you have to use for React Native), and use a CSS-in-JS library for things like `:hover` and media queries.
+CSS Modules 挺好用，但它不能完全发挥 JavaScript 的威力。它只是提供了不错的封装，但在我看来，React 行内样式和 CSS-in-JS 完全把写样式带到了一个新高度。我个人建议是普通的样式就用 React 行内样式（你在 React Native 中也是用它）；当要用 `:hover` 或者媒体查询的时候，就用 CSS-in-JS。
 
-There are [tons of CSS-in-JS libraries](https://github.com/MicheleBertoli/css-in-js). JSS is a full-featured, well-rounded, and [performant](https://github.com/cssinjs/jss/blob/master/docs/performance.md) one.
+有 [太多 CSS-in-JS 的库](https://github.com/MicheleBertoli/css-in-js)了。JSS 是一个功能全面、写法简单、 [性能优异](https://github.com/cssinjs/jss/blob/master/docs/performance.md) 库。
 
 ## JSS
 
-> 💡 **[JSS](http://cssinjs.org/)** is a CSS-in-JS library to write your styles in JavaScript and inject them into your app.
+> 💡 **[JSS](http://cssinjs.org/)** 是一个用 JavaScript 来写样式，并把样式插入 app 中的 CSS-in-JS 库。
 
-Now that we have some base template with Bootstrap, let's write some custom CSS. I mentioned earlier that React inline styles could not handle `:hover` and media queries, so we'll show a simple example of this on the homepage using JSS. JSS can be used via `react-jss`, a library that is convenient to use with React components.
+基本的 Bootstrap 模板已经定义好了，现在我们加入一些自定义的样式。我之前提到过 React 行内样式处理不了 `:hover` 和媒体查询，所以我们就在首页展示一下怎么用 JSS 来解决这些问题。JSS 可以通过 `react-jss` 实现。
 
-- Run `yarn add react-jss`
+- 运行 `yarn add react-jss`
 
-Add the following to your `.flowconfig` file, as there is currently a Flow [issue](https://github.com/cssinjs/jss/issues/411) with JSS:
+以下内容添加到 `.flowconfig` 文件，因为 Flow 目前和 JSS 兼容还有点 [问题](https://github.com/cssinjs/jss/issues/411)：
 
 ```flowconfig
 [ignore]
 .*/node_modules/jss/.*
 ```
 
-### Server-side
+### Server-side（服务端）
 
-JSS can render styles on the server for the initial rendering.
+JSS 可以在服务端初始化的时候渲染样式。
 
-- Add the following constants to `src/shared/config.js`:
+- 以下变量添加到 `src/shared/config.js`：
 
 ```js
 export const JSS_SSR_CLASS = 'jss-ssr'
 export const JSS_SSR_SELECTOR = `.${JSS_SSR_CLASS}`
 ```
 
-- Edit `src/server/render-app.jsx` like so:
+- 修改 `src/server/render-app.jsx`：
 
 ```js
 import { SheetsRegistry, SheetsRegistryProvider } from 'react-jss'
@@ -394,11 +394,11 @@ const renderApp = (location: string, plainPartialState: ?Object, routerContext: 
   // [...]
 ```
 
-## Client-side
+## Client-side（客户端）
 
-The first thing the client should do after rendering the app client-side, is to get rid of the server-generated JSS styles.
+客户端渲染 app 后的第一件事情，就是处理服务端生成的 JSS 样式。
 
-- Add the following to `src/client/index.jsx` after the `ReactDOM.render` calls (before `setUpSocket(store)` for instance):
+- 以下内容放在 `src/client/index.jsx` 文件的 `ReactDOM.render` 方法后面（在 `setUpSocket(store)` 之前）：
 
 ```js
 import { APP_CONTAINER_SELECTOR, JSS_SSR_SELECTOR } from '../shared/config'
@@ -411,7 +411,7 @@ jssServerSide.parentNode.removeChild(jssServerSide)
 setUpSocket(store)
 ```
 
-Edit `src/shared/component/page/home.jsx` like so:
+修改 `src/shared/component/page/home.jsx` ：
 
 ```js
 import injectSheet from 'react-jss'
@@ -445,15 +445,14 @@ const HomePage = ({ classes }: { classes: Object }) =>
 
 export default injectSheet(styles)(HomePage)
 ```
+和 React 行内样式不同的是，JSS 使用了 class。样式作为参数传递个 `injectSheet`，最终，CSS 的 class 作为属性传递给组件。
 
-Unlike React inline styles, JSS uses classes. You pass styles to `injectSheet` and the CSS classes end up in the props of your component.
+🏁 运行 `yarn start` 和 `yarn dev:wds`。打开主页，查看页面源文件（不是审查元素）。你会发现，初始化渲染的时候，JSS 是在 DOM 中的。初始化的时候，JSS 在 `<style class="jss-ssr">` 元素中（只有主页是这样）。审查元素的方式，就找不到 JSS 了，因为它已经被 `<style type="text/css" data-jss data-meta="HomePage">` 替换掉了。
 
-🏁 Run `yarn start` and `yarn dev:wds`. Open the homepage. Show the source of the page (not in the inspector) to see that the JSS styles are present in the DOM at the initial render in the `<style class="jss-ssr">` element (only on the Home page). They should be gone in the inspector, replaced by `<style type="text/css" data-jss data-meta="HomePage">`.
+**注意**：在生产环境中，`data-meta` 会被混淆。酷！
 
-**Note**: In production mode, the `data-meta` is obfuscated. Sweet!
+鼠标悬停在 "Hover me" 标签，标签会变成红色。resize 浏览器窗口大小，使浏览器宽度小于 800px， "Resize your window" 标签会变成红色。绿色的按钮用 JSS 的 `composes` 属性扩展了 Bootstrap 的 CSS classes。
 
-If you hover over the "Hover me" label, it should turn red. If you resize your browser window to be narrower than 800px, the "Resize your window" label should turn red. The green button is extending Bootstrap's CSS classes using JSS' `composes` property.
+下一章： [09 - Travis, Coveralls, Heroku](09-travis-coveralls-heroku.md#readme)
 
-Next section: [09 - Travis, Coveralls, Heroku](09-travis-coveralls-heroku.md#readme)
-
-Back to the [previous section](07-socket-io.md#readme) or the [table of contents](https://github.com/verekia/js-stack-from-scratch#table-of-contents).
+回到 [上一章](07-socket-io.md#readme) 或者 [目录](https://github.com/verekia/js-stack-from-scratch#table-of-contents).

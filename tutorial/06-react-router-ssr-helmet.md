@@ -1,20 +1,22 @@
 # 06 - React Router, Server-Side Rendering, and Helmet
 
-Code for this chapter available [here](https://github.com/verekia/js-stack-walkthrough/tree/master/06-react-router-ssr-helmet).
+本章代码在 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/06-react-router-ssr-helmet).
 
-In this chapter we are going to create different pages for our app and make it possible to navigate between them.
+本章我们将为 app 创建多个页面，并使多个页面之间可路由。
 
 ## React Router
 
-> 💡 **[React Router](https://reacttraining.com/react-router/)** is a library to navigate between pages in your React app. It can be used on both the client and the server.
+> 💡 **[React Router](https://reacttraining.com/react-router/)** 用来在 React app 的页面间实现路由。这个包既可以运行在客户端，也能运行在服务端。
 
-React Router has received a major update with its v4 release which is still in beta. Since I want this tutorial to be future-proof, we'll be using v4.
 
-- Run `yarn add react-router@next react-router-dom@next`
 
-On the client side, we first need to wrap our app inside a `BrowserRouter` component.
+React Router 的 V4 版本更新很大，该版本还处在测试阶段。为了让本教程具有前瞻性，我们会使用这个版本。
 
-- Update your `src/client/index.jsx` like so:
+- 运行 `yarn add react-router@next react-router-dom@next`
+
+在客户端，要把 app 包裹在 `BrowserRouter` 组件中。
+
+- 修改 `src/client/index.jsx` ：
 
 ```js
 // [...]
@@ -30,16 +32,16 @@ const wrapApp = (AppComponent, reduxStore) =>
   </Provider>
 ```
 
-## Pages
+## Pages（页面）
 
-Our app will have 4 pages:
+我们的 app 会有四个页面
 
-- A Home page.
-- A Hello page showing a button and message for the synchronous action.
-- A Hello Async page showing a button and message for the asynchronous action.
-- A 404 "Not Found" page.
+- Home —— 主页
+- Hello 页面 —— 一个按钮加一段同步信息
+- Hello 的异步页面 —— 一个按钮加一段异步信息
+- 404 页面
 
-- Create a `src/client/component/page/home.jsx` file containing:
+- 创建 `src/client/component/page/home.jsx`：
 
 ```js
 // @flow
@@ -51,7 +53,7 @@ const HomePage = () => <p>Home</p>
 export default HomePage
 ```
 
-- Create a `src/client/component/page/hello.jsx` file containing:
+- 创建 `src/client/component/page/hello.jsx`：
 
 ```js
 // @flow
@@ -71,7 +73,7 @@ export default HelloPage
 
 ```
 
-- Create a `src/client/component/page/hello-async.jsx` file containing:
+- 创建 `src/client/component/page/hello-async.jsx`：
 
 ```js
 // @flow
@@ -90,7 +92,7 @@ const HelloAsyncPage = () =>
 export default HelloAsyncPage
 ```
 
-- Create a `src/client/component/page/not-found.jsx` file containing:
+- 创建 `src/client/component/page/not-found.jsx`：
 
 ```js
 // @flow
@@ -102,11 +104,11 @@ const NotFoundPage = () => <p>Page not found</p>
 export default NotFoundPage
 ```
 
-## Navigation
+## Navigation（导航/路由）
 
-Let's add some routes in the shared config file.
+在前后端共享的配置文件中，加入路由配置
 
-- Edit your `src/shared/routes.js` like so:
+- 修改 `src/shared/routes.js`：
 
 ```js
 // @flow
@@ -119,9 +121,9 @@ export const NOT_FOUND_DEMO_PAGE_ROUTE = '/404'
 export const helloEndpointRoute = (num: ?number) => `/ajax/hello/${num || ':num'}`
 ```
 
-The `/404` route is just going to be used in a navigation link for the sake of demonstrating what happens when you click on a broken link.
+`/404` 页面本来应该是在访问不到链接的时候展示的；但为了例子简单，我们把 404 页面设置为一个固定的展示页面。
 
-- Create a `src/client/component/nav.jsx` file containing:
+- 创建 `src/client/component/nav.jsx`：
 
 ```js
 // @flow
@@ -154,9 +156,9 @@ const Nav = () =>
 export default Nav
 ```
 
-Here we simply create a bunch of `NavLink`s that use the previously declared routes.
+根据前一个文件声明的路由，我们创建了一些 `NavLink` （导航链接）。
 
-- Finally, edit `src/client/app.jsx` like so:
+- 最后，修改 `src/client/app.jsx`：
 
 ```js
 // @flow
@@ -191,33 +193,33 @@ const App = () =>
 export default App
 ```
 
-🏁 Run `yarn start` and `yarn dev:wds`. Open `http://localhost:8000`, and click on the links to navigate between our different pages. You should see the URL changing dynamically. Switch between different pages and use the back button of your browser to see that the browsing history is working as expected.
+🏁 运行 `yarn start` 和 `yarn dev:wds`，浏览 `http://localhost:8000`，点击链接查看各个页面。URL 是动态更新的；使用浏览器的返回功能，看看浏览历史是否正确。
 
-Now, let's say you navigated to `http://localhost:8000/hello` this way. Hit the refresh button. You now get a 404, because our Express server only responds to `/`. As you navigated between pages, you were actually only doing it on the client-side. Let's add server-side rendering to the mix to get the expected behavior.
+假设你现在再访问 `http://localhost:8000/hello` 页面，刷新一下页面，你会得到一个 404 错误。这是因为 Express 服务器只会相应 `/` 地址。当你在各个页面间跳转的时候，你只是用到了客户端路由。为了解决这个问题，我们要用到服务端渲染。
 
-## Server-Side Rendering
+## Server-Side Rendering（服务端渲染）
 
-> 💡 **Server-Side Rendering** means rendering your app at the initial load of the page instead of relying on JavaScript to render it in the client's browser.
+> 💡 **服务端渲染** 意味着在页面初始化加载的时候，就已经被渲染好了（服务器返回的就是渲染好的页面），而不是依赖浏览器的渲染。
 
-SSR is essential for SEO and provides a better user experience by showing the app to your users right away.
+SSR 的有点是：有利于 SEO 和更好的用户体验。
 
-The first thing we're going to do here is to migrate most of our client code to the shared / isomorphic / universal part of our codebase, since the server is now going to render our React app too.
+首先，我们要把大部分客户端代码移动到 shared/isomorphic/universal，因为我们的 React app 还要在服务端渲染。
 
-### The big migration to `shared`
+### 移动代码到 `shared`
 
-- Move all the files located under `client` to `shared`, except `src/client/index.jsx`.
+- 除了 `src/client/index.jsx` 之外，`client` 文件夹下的所有文件都移动到 `shared`。
 
-We have to adjust a whole bunch of imports:
+因为路径改变，我们的引用也要修改一下。
 
-- In `src/client/index.jsx`, replace the 3 occurrences of `'./app'` by `'../shared/app'`, and `'./reducer/hello'` by `'../shared/reducer/hello'`
+- 在 `src/client/index.jsx`中， 3 处 `'./app'` 都修改成 `'../shared/app'`， `'./reducer/hello'` 修改为 `'../shared/reducer/hello'`
 
-- In `src/shared/app.jsx`, replace `'../shared/routes'` by `'./routes'` and `'../shared/config'` by `'./config'`
+- 在 `src/shared/app.jsx` 文件中，把 `'../shared/routes'` 修改为 `'./routes'`， `'../shared/config'` 修改为 `'./config'`
 
-- In `src/shared/component/nav.jsx`, replace `'../../shared/routes'` by `'../routes'`
+- 在 `src/shared/component/nav.jsx`， 把 `'../../shared/routes'` 修改为 `'../routes'`
 
-### Server changes
+### 服务端代码调整
 
-- Create a `src/server/routing.js` file containing:
+- 创建 `src/server/routing.js` ：
 
 ```js
 // @flow
@@ -272,11 +274,11 @@ export default (app: Object) => {
 }
 ```
 
-This file is where we deal with requests and responses. The calls to business logic are externalized to a different `controller` module.
+这个文件用来处理请求和相应；至于业务逻辑的处理，我们把放到 `controller` 模块中。
 
-**Note**: You will find a lot of React Router examples using `*` as the route on the server, leaving the entire routing handling to React Router. Since all requests go through the same function, that makes it inconvenient to implement MVC-style pages. Instead of doing that, we're here explicitly declaring the routes and their dedicated responses, to be able to fetch data from the database and pass it to a given page easily.
+**注意**：你可能看到一些 React Route 示例中，用 `*` 作为服务端的路由 —— 这样做，所有的路由操作都被交给 React Router 处理。因为所有的请求都经过同样的方法，不利于开发 MVC 页面。我们的做法是，明确声明页面路由和返回值。这样做有些繁琐，但能从数据库获取数据，并且很简单地就能把值传给页面。
 
-- Create a `src/server/controller.js` file containing:
+- 创建 `src/server/controller.js` ：
 
 ```js
 // @flow
@@ -296,9 +298,9 @@ export const helloEndpoint = (num: number) => ({
 })
 ```
 
-Here is our controller. It would typically make business logic and database calls, but in our case we just hard-code some results. Those results are passed back to the `routing` module to be used to initialize our server-side Redux store.
+这就是我们的 controller。它只处理业务逻辑和数据库请求 —— 注意，为了简单，在我们的例子里，数据是写死的硬编码。这些数据被传回到 `routing` 模块，被用来初始化服务端的 Redux store。
 
-- Create a `src/server/init-store.js` file containing:
+- 创建 `src/server/init-store.js` ：
 
 ```js
 // @flow
@@ -325,9 +327,9 @@ const initStore = (plainPartialState: ?Object) => {
 export default initStore
 ```
 
-The only thing we do here, besides calling `createStore` and applying middleware, is to merge the plain JS object we received from the `controller` into a default Redux state containing Immutable objects.
+除了调用 `createStore` 和应用中间件外，我们做的唯一的事情就是把从 `controller` 接收到的 JS 对象转换为不可变对象，然后合并到 Redux state 中。
 
-- Edit `src/server/index.js` like so:
+- 修改 `src/server/index.js` ：
 
 ```js
 // @flow
@@ -354,9 +356,9 @@ app.listen(WEB_PORT, () => {
 })
 ```
 
-Nothing special here, we just call `routing(app)` instead of implementing routing in this file.
+这段代码没什么特别的，我们调用 `routing(app)` 方法，而不是在这个文件中来实现路由。
 
-- Rename `src/server/render-app.js` to `src/server/render-app.jsx` and edit it like so:
+- 重命名 `src/server/render-app.js` 为 `src/server/render-app.jsx` ，并修改内容：
 
 ```js
 // @flow
@@ -401,11 +403,11 @@ const renderApp = (location: string, plainPartialState: ?Object, routerContext: 
 export default renderApp
 ```
 
-`ReactDOMServer.renderToString` is where the magic happens. React will evaluate our entire `shared` `App`, and return a plain string of HTML elements. `Provider` works the same as on the client, but on the server, we wrap our app inside `StaticRouter` instead of `BrowserRouter`. In order to pass the Redux store from the server to the client, we pass it to `window.__PRELOADED_STATE__` which is just some arbitrary variable name.
+`ReactDOMServer.renderToString` 是核心方法。. React 会分析这个 `shared（前后端共享的）` `App`然后返回 HTML 元素的字符串。 `Provider` 和客户端的使用没什么区别，但在服务端，我们需要把 app 用 `StaticRouter` 包裹起来，而不是用 `BrowserRouter` 包裹。为了把 Redux store 从服务端传到客户端，我们把它传给 `window.__PRELOADED_STATE__` （变量名可以任意定义）。
 
-**Note**: Immutable objects implement the `toJSON()` method which means you can use `JSON.stringify` to turn them into plain JSON strings.
+**注意**: 不可变对象实现了 `toJSON()` 方法，因此你可以使用 `JSON.stringify` 来把他们转换为 JS 对象。
 
-- Edit `src/client/index.jsx` to use that preloaded state:
+- 编辑 `src/client/index.jsx` ，使用预加载的 state：
 
 ```js
 import Immutable from 'immutable'
@@ -422,19 +424,19 @@ const store = createStore(combineReducers(
   composeEnhancers(applyMiddleware(thunkMiddleware)))
 ```
 
-Here with feed our client-side store with the `preloadedState` that was received from the server.
+客户端的 store 被赋值为 `preloadedState`，这个值是服务端传过来的。
 
-🏁 You can now run `yarn start` and `yarn dev:wds` and navigate between pages. Refreshing the page on `/hello`, `/hello-async`, and `/404` (or any other URI), should now work correctly. Notice how the `message` and `messageAsync` vary depending on if you navigated to that page from the client or if it comes from server-side rendering.
+🏁 现在运行 `yarn start` 和 `yarn dev:wds`，在页面之间跳转。在 `/hello`， `/hello-async`， 和 `/404`（或者任意其他页面）刷新，应该没有之前的 404 问题了。显示的是 `message` 还是 `messageAsync`，取决于你是在客户端跳转到这个页面，还是直接从服务端拿到的这个页面。
 
 ### React Helmet
 
-> 💡 **[React Helmet](https://github.com/nfl/react-helmet)**: A library to inject content to the `head` of a React app, on both the client and the server.
+> 💡 **[React Helmet](https://github.com/nfl/react-helmet)**: 把 `head` 内容注入到 React app，可运行于客户端和服务端。
 
-I purposely made you write `FIX ME` in the title to highlight the fact that even though we are doing server-side rendering, we currently do not fill the `title` tag properly (or any of the tags in `head` that vary depending on the page you're on).
+我建议你在标题写上 `FIX ME`，从而突出一个事实：虽然我们做了服务端渲染，但我们没有正确的把 `title` 标签添加进来（其他 `head` 内的标签页不对，因为它们应该是随着页面改变而改变的）。
 
-- Run `yarn add react-helmet`
+- 运行 `yarn add react-helmet`
 
-- Edit `src/server/render-app.jsx` like so:
+- 编辑 `src/server/render-app.jsx` ：
 
 ```js
 import Helmet from 'react-helmet'
@@ -458,9 +460,9 @@ const renderApp = (/* [...] */) => {
 }
 ```
 
-React Helmet uses [react-side-effect](https://github.com/gaearon/react-side-effect)'s `rewind` to pull out some data from the rendering of our app, which will soon contain some `<Helmet />` components. Those `<Helmet />` components are where we set the `title` and other `head` details for each page. Note that `Helmet.rewind()` *must* come after `ReactDOMServer.renderToString()`.
+React Helmet 使用 [react-side-effect](https://github.com/gaearon/react-side-effect)的 `rewind`，从 app 的渲染结果中拉取数据，这些数据会被 `<Helmet />` 组件使用。 我们在 `<Helmet />` 组件中为每一个页面设置 `title` 和其他 `head` 标签的值。注意 `Helmet.rewind()` *必须* 写在 `ReactDOMServer.renderToString()` 后面。
 
-- Edit `src/shared/app.jsx` like so:
+- 修改 `src/shared/app.jsx` ：
 
 ```js
 import Helmet from 'react-helmet'
@@ -472,7 +474,7 @@ const App = () =>
     // [...]
 ```
 
-- Edit `src/shared/component/page/home.jsx` like so:
+- 修改 `src/shared/component/page/home.jsx`：
 
 ```js
 // @flow
@@ -497,7 +499,7 @@ export default HomePage
 
 ```
 
-- Edit `src/shared/component/page/hello.jsx` like so:
+- 修改 `src/shared/component/page/hello.jsx`：
 
 ```js
 // @flow
@@ -527,7 +529,7 @@ const HelloPage = () =>
 export default HelloPage
 ```
 
-- Edit `src/shared/component/page/hello-async.jsx` like so:
+- 修改 `src/shared/component/page/hello-async.jsx` ：
 
 ```js
 // @flow
@@ -558,7 +560,7 @@ export default HelloAsyncPage
 
 ```
 
-- Edit `src/shared/component/page/not-found.jsx` like so:
+- 修改 `src/shared/component/page/not-found.jsx` ：
 
 ```js
 // @flow
@@ -583,10 +585,10 @@ const NotFoundPage = () =>
 export default NotFoundPage
 ```
 
-The `<Helmet>` component doesn't actually render anything, it just injects content in the `head` of your document and exposes the same data to the server.
+事实上， `<Helmet>` 组件没有渲染任何东西，它只是向 `head` 标签中插入内容，并且向服务端暴露了相同的内容。
 
-🏁 Run `yarn start` and `yarn dev:wds` and navigate between pages. The title on your tab should change when you navigate, and it should also stay the same when you refresh the page. Show the source of the page to see how React Helmet sets the `title` and `meta` tags even for server-side rendering.
+🏁 运行 `yarn start` 和 `yarn dev:wds`，在页面之间做跳转。当你跳转页面的时候，title 应该已经变了；并且当你刷新页面的时候，title 不会更改。查看页面的源文件，研究一下 React Helmet 是怎样为服务端渲染设置 `title` 和 `meta` 值的。
 
-Next section: [07 - Socket.IO](07-socket-io.md#readme)
+下一章: [07 - Socket.IO](07-socket-io.md#readme)
 
-Back to the [previous section](05-redux-immutable-fetch.md#readme) or the [table of contents](https://github.com/verekia/js-stack-from-scratch#table-of-contents).
+回到 [上一章](05-redux-immutable-fetch.md#readme) 或者 [目录](https://github.com/verekia/js-stack-from-scratch#table-of-contents).

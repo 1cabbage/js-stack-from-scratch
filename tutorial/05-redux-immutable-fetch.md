@@ -355,21 +355,21 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(MessageAsync)
 ```
 
-在这个 container, we are referring to a `messageAsync` property, which we're going to add to our reducer soon.
+在这个 container 中，我们引用了一个 `messageAsync` 属性，我们要在 reducer 中加入这个属性。
 
-What we need now is to create the `sayHelloAsync` action.
+现在我们需要创建 `sayHelloAsync` action。
 
 ### Fetch
 
-> 💡 **[Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)** is a standardized JavaScript function to make asynchronous calls inspired by jQuery's AJAX methods.
+> 💡 **[Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)** 是发起异步请求的标准方法，受了 jQuery AJAX 方法的启发。
 
-We are going to use `fetch` to make calls to the server from the client. `fetch` is not supported by all browsers yet, so we are going to need a polyfill. `isomorphic-fetch` is a polyfill that makes it work cross-browsers and in Node too!
+我们在向服务器发起请求的时候会用到 `fetch`，这个方法目前还没有被所有浏览器支持，所以需要 polyfill。 `isomorphic-fetch` 不单单能跨浏览器使用，甚至还能在 Node 环境使用。
 
-- Run `yarn add isomorphic-fetch`
+- 运行 `yarn add isomorphic-fetch`
 
-Since we're using `eslint-plugin-compat`, we need to indicate that we are using a polyfill for `fetch` to not get warnings from using it.
+因为使用了 `eslint-plugin-compat` 插件，为了在使用 `fetch` 时关闭不必要的警告，配置文件需作出修改：
 
-- Add the following to your `.eslintrc.json` file:
+- 修改 `.eslintrc.json`：
 
 ```json
 "settings": {
@@ -377,11 +377,11 @@ Since we're using `eslint-plugin-compat`, we need to indicate that we are using 
 },
 ```
 
-### 3 asynchronous actions
+### 3个异步 actions
 
-`sayHelloAsync` is not going to be a regular action. Asynchronous actions are usually split into 3 actions, which trigger 3 different states: a *request* action (or "loading"), a *success* action, and a *failure* action.
+`sayHelloAsync` 不是一个常规的 action。异步 actions 通常分为三部分，并触发三种状态：一个 *request（请求）* action，一个 *success（成功）* action，一个 *failure（失败）* action。（译者注：如果你用过 Promise，应该感到熟悉~）
 
-- Edit `src/client/action/hello.js` like so:
+- 编辑 `src/client/action/hello.js`：
 
 ```js
 // @flow
@@ -418,11 +418,11 @@ export const sayHelloAsync = (num: number) => (dispatch: Function) => {
 }
 ```
 
-Instead of returning an action, `sayHelloAsync` returns a function which launches the `fetch` call. `fetch` returns a `Promise`, which we use to *dispatch* different actions depending on the current state of our asynchronous call.
+`sayHelloAsync` 没返回一个 action，而是返回了一个发起 `fetch` 请求的方法。`fetch` 返回一个 `Promise`，根据异步请求的状态，这个请求会 *dispatch（分发）* 不同的 action。
 
-### 3 asynchronous action handlers
+### 3 异步 action 处理器
 
-Let's handle these different actions in `src/client/reducer/hello.js`:
+在 `src/client/reducer/hello.js` 文件中，处理不同的 actions：
 
 ```js
 // @flow
@@ -460,15 +460,15 @@ const helloReducer = (state: Immut = initialState, action: { type: string, paylo
 export default helloReducer
 ```
 
-We added a new field to our store, `messageAsync`, and we update it with different messages depending on the action we receive. During `SAY_HELLO_ASYNC_REQUEST`, we show `Loading...`. `SAY_HELLO_ASYNC_SUCCESS` updates `messageAsync` similarly to how `SAY_HELLO` updates `message`. `SAY_HELLO_ASYNC_FAILURE` gives an error message.
+在 store 中，我们添加了一个新值： `messageAsync`，收到的 action 不同，值也不同。 如果 action.type 是 `SAY_HELLO_ASYNC_REQUEST`，值设为 `Loading...`。 `SAY_HELLO_ASYNC_SUCCESS` 和 `SAY_HELLO` 处理 `message` 的方式一样。 如果是 `SAY_HELLO_ASYNC_FAILURE`，则给出错误信息。
 
 ### Redux-thunk
 
-In `src/client/action/hello.js`, we made `sayHelloAsync`, an action creator that returns a function. This is actually not a feature that is natively supported by Redux. In order to perform these async actions, we need to extend Redux's functionality with the `redux-thunk` *middleware*.
+在 `src/client/action/hello.js`，我们创建了 `sayHelloAsync`，他是一个 action creator，返回一个方法。Redux 原生并不支持这样使用。为了使用这样异步 async actions，我们用 `redux-thunk` *中间件* 来扩展 Redux 功能。
 
-- Run `yarn add redux-thunk`
+- 安装 `yarn add redux-thunk`
 
-- Update your `src/client/index.jsx` file like so:
+- 修改 `src/client/index.jsx`：
 
 ```js
 // @flow
@@ -514,9 +514,9 @@ if (module.hot) {
 }
 ```
 
-Here we pass `redux-thunk` to Redux's `applyMiddleware` function. In order for the Redux Devtools to keep working, we also need to use Redux's `compose` function. Don't worry too much about this part, just remember that we enhance Redux with `redux-thunk`.
+我们把 `redux-thunk` 传给 Redux `applyMiddleware` 方法。为了使用 Redux 开发工具，我们还需要使用 Redux 的 `compose` 方法。别太在意这一部分，只要知道我们用 `redux-thunk` 增强了 Redux 就行了。
 
-- Update `src/client/app.jsx` like so:
+- 修改 `src/client/app.jsx`：
 
 ```js
 // @flow
@@ -540,19 +540,19 @@ const App = () =>
 export default App
 ```
 
-🏁 Run `yarn start` and `yarn dev:wds` and you should now be able to click the "Say hello asynchronously and send 1234" button and retrieve a corresponding message from the server! Since you're working locally, the call is instantaneous, but if you open the Redux Devtools, you will notice that each click triggers both `SAY_HELLO_ASYNC_REQUEST` and `SAY_HELLO_ASYNC_SUCCESS`, making the message go through the intermediate `Loading...` state as expected.
+🏁 运行 `yarn start`和 `yarn dev:wds`， 点击 "Say hello asynchronously and send 1234" 按钮，就能收到服务器返回的信息！因为你的服务器部署在本地，所以请求都是瞬间返回。要是你打开 Redux 开发工具，你就会发现每一次点击都触发了 `SAY_HELLO_ASYNC_REQUEST` and `SAY_HELLO_ASYNC_SUCCESS`；也就是说，你在浏览器里可能看不到（因为太快了），但 `Loading...` 状态确实存在过。
 
-You can congratulate yourself, that was an intense section! Let's wrap it up with some testing.
+现在可以放松一下，因为这一章的确有点难。现在做一些测试。
 
-## Testing
+## 测试
 
-In this section, we are going to test our actions and reducer. Let's start with the actions.
+这一部分，我们会测试 actions 和 reducer。从测试 actions 开始：
 
-In order to isolate the logic that is specific to `action/hello.js` we are going to need to *mock* things that don't concern it, and also mock that AJAX `fetch` request which should not trigger an actual AJAX in our tests.
+为了分离 `action/hello.js` 的代码逻辑，我们需要进行 *mock（模拟）* 一些东西；`fetch` 操作也需要模拟，测试中我们并不用真的发起 AJAX 操作。
 
-- Run `yarn add --dev redux-mock-store fetch-mock`
+- 运行 `yarn add --dev redux-mock-store fetch-mock`
 
-- Create a `src/client/action/hello.test.js` file containing:
+- 创建 `src/client/action/hello.test.js`：
 
 ```js
 import fetchMock from 'fetch-mock'
@@ -611,11 +611,11 @@ test('sayHelloAsync data error', () => {
 })
 ```
 
-Alright, Let's look at what's happening here. First we mock the Redux store using `const mockStore = configureMockStore([thunkMiddleware])`. By doing this we can dispatch actions without them triggering any reducer logic. For each test, we mock `fetch` using `fetchMock.get()` and make it return whatever we want. What we actually test using `expect()` is which series of actions have been dispatched by the store, thanks to the `store.getActions()` function from `redux-mock-store`. After each test we restore the normal behavior of `fetch` with `fetchMock.restore()`.
+上面的代码首先用 `const mockStore = configureMockStore([thunkMiddleware])` 这行代码模拟 Redux store。这样，当我们 dispatch （分发）actions 时，就不会触发 reducer 的逻辑了。每一个测试，我们都用 `fetchMock.get()` 来模拟 `fetch`，并且返回值是我们自定义的。我们真正测试的东西，是 store 分发的一系列 actions，这里，我们用到了 `redux-mock-store` 提供的 'store.getActions()' 方法。在每一次测试之后，我们用 `fetchMock.restore()` 方法来把 'fetch' 恢复到初始状态。
 
-Let's now test our reducer, which is much easier.
+reducer 的测试相对简单：
 
-- Create a `src/client/reducer/hello.test.js` file containing:
+- 创建 `src/client/reducer/hello.test.js`：
 
 ```js
 import {
@@ -659,10 +659,10 @@ test('handle SAY_HELLO_ASYNC_FAILURE', () => {
 })
 ```
 
-Before each test, we initialize `helloState` with the default result of our reducer (the `default` case of our `switch` statement in the reducer, which returns `initialState`). The tests are then very explicit, we just make sure the reducer updates `message` and `messageAsync` correctly depending on which action it received.
+每次测试之前，我们都初始化了 `helloState` 的值，把它设为 reducer 的默认返回值（ `switch` 的默认返回值是 `initialState` ）。
 
-🏁 Run `yarn test`. It should be all green.
+🏁 运行 `yarn test`，所有测试通过。
 
-Next section: [06 - React Router, Server-Side Rendering, Helmet](06-react-router-ssr-helmet.md#readme)
+下一章： [06 - React Router, Server-Side Rendering, Helmet](06-react-router-ssr-helmet.md#readme)
 
-Back to the [previous section](04-webpack-react-hmr.md#readme) or the [table of contents](https://github.com/verekia/js-stack-from-scratch#table-of-contents).
+回到 [上一章](04-webpack-react-hmr.md#readme) 或者 [目录](https://github.com/verekia/js-stack-from-scratch#table-of-contents).
