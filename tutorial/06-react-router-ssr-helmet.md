@@ -8,8 +8,6 @@
 
 > 💡 **[React Router](https://reacttraining.com/react-router/)** 用来在 React app 的页面间实现路由。这个包既可以运行在客户端，也能运行在服务端。
 
-
-
 React Router 的 V4 版本更新很大，该版本还处在测试阶段。为了让本教程具有前瞻性，我们会使用这个版本。
 
 - 运行 `yarn add react-router@next react-router-dom@next`
@@ -193,17 +191,17 @@ const App = () =>
 export default App
 ```
 
-🏁 运行 `yarn start` 和 `yarn dev:wds`，浏览 `http://localhost:8000`，点击链接查看各个页面。URL 是动态更新的；使用浏览器的返回功能，看看浏览历史是否正确。
+🏁 运行 `yarn start` 和 `yarn dev:wds`，浏览 `http://localhost:8000` ，点击链接查看各个页面。URL 是动态更新的；使用浏览器的返回功能，看看浏览历史是否正确。
 
-假设你现在再访问 `http://localhost:8000/hello` 页面，刷新一下页面，你会得到一个 404 错误。这是因为 Express 服务器只会相应 `/` 地址。当你在各个页面间跳转的时候，你只是用到了客户端路由。为了解决这个问题，我们要用到服务端渲染。
+假设你现在再访问 `http://localhost:8000/hello` 页面，刷新一下页面，你会得到一个 404 错误。这是因为 Express 服务器只会响应 `/` 地址。当你在各个页面间跳转的时候，你只是用到了客户端路由。为了解决这个问题，我们要用到服务端渲染。
 
 ## Server-Side Rendering（服务端渲染）
 
 > 💡 **服务端渲染** 意味着在页面初始化加载的时候，就已经被渲染好了（服务器返回的就是渲染好的页面），而不是依赖浏览器的渲染。
 
-SSR 的有点是：有利于 SEO 和更好的用户体验。
+SSR 的优点是：有利于 SEO 和更好的用户体验。
 
-首先，我们要把大部分客户端代码移动到 shared/isomorphic/universal，因为我们的 React app 还要在服务端渲染。
+首先，为了让 React app 在服务端渲染，我们要把大部分客户端代码移动到 shared 文件夹。
 
 ### 移动代码到 `shared`
 
@@ -215,7 +213,7 @@ SSR 的有点是：有利于 SEO 和更好的用户体验。
 
 - 在 `src/shared/app.jsx` 文件中，把 `'../shared/routes'` 修改为 `'./routes'`， `'../shared/config'` 修改为 `'./config'`
 
-- 在 `src/shared/component/nav.jsx`， 把 `'../../shared/routes'` 修改为 `'../routes'`
+- 在 `src/shared/component/nav.jsx`，把 `'../../shared/routes'` 修改为 `'../routes'`
 
 ### 服务端代码调整
 
@@ -274,9 +272,9 @@ export default (app: Object) => {
 }
 ```
 
-这个文件用来处理请求和相应；至于业务逻辑的处理，我们把放到 `controller` 模块中。
+这段代码只用来处理请求和响应；至于业务逻辑的处理，会被放到 `controller` 模块中。
 
-**注意**：你可能看到一些 React Route 示例中，用 `*` 作为服务端的路由 —— 这样做，所有的路由操作都被交给 React Router 处理。因为所有的请求都经过同样的方法，不利于开发 MVC 页面。我们的做法是，明确声明页面路由和返回值。这样做有些繁琐，但能从数据库获取数据，并且很简单地就能把值传给页面。
+**注意**：你可能看到一些 React Route 示例中，用 `*` 作为服务端的路由 —— 这样做，所有的路由操作都被交给 React Router 处理。因为所有的请求都经过同样的方法，不利于开发 MVC 页面。我们的做法是，明确声明页面路由和返回值。这样做有些繁琐，但能从数据库获取数据，并且很简单地就能把值传递给页面。
 
 - 创建 `src/server/controller.js` ：
 
@@ -298,7 +296,7 @@ export const helloEndpoint = (num: number) => ({
 })
 ```
 
-这就是我们的 controller。它只处理业务逻辑和数据库请求 —— 注意，为了简单，在我们的例子里，数据是写死的硬编码。这些数据被传回到 `routing` 模块，被用来初始化服务端的 Redux store。
+这就是我们的 controller。它只处理业务逻辑和数据库请求 —— 注意，为了简单，在我们的例子里，数据是写死的硬编码。这些数据被传回到 `routing` 模块，用来初始化服务端的 Redux store。
 
 - 创建 `src/server/init-store.js` ：
 
@@ -356,7 +354,7 @@ app.listen(WEB_PORT, () => {
 })
 ```
 
-这段代码没什么特别的，我们调用 `routing(app)` 方法，而不是在这个文件中来实现路由。
+这段代码没什么特别的，我们调用 `routing(app)` 方法，而不是在这个文件中实现路由。
 
 - 重命名 `src/server/render-app.js` 为 `src/server/render-app.jsx` ，并修改内容：
 
@@ -403,7 +401,7 @@ const renderApp = (location: string, plainPartialState: ?Object, routerContext: 
 export default renderApp
 ```
 
-`ReactDOMServer.renderToString` 是核心方法。. React 会分析这个 `shared（前后端共享的）` `App`然后返回 HTML 元素的字符串。 `Provider` 和客户端的使用没什么区别，但在服务端，我们需要把 app 用 `StaticRouter` 包裹起来，而不是用 `BrowserRouter` 包裹。为了把 Redux store 从服务端传到客户端，我们把它传给 `window.__PRELOADED_STATE__` （变量名可以任意定义）。
+`ReactDOMServer.renderToString` 是核心方法。React 会分析这个 `shared（前后端共享的）` `App`然后返回 HTML 元素的字符串。 `Provider` 和客户端的使用没什么区别，但在服务端，我们需要把 app 用 `StaticRouter` 包裹起来，而不是用 `BrowserRouter` 包裹。为了把 Redux store 从服务端传到客户端，我们把它传给 `window.__PRELOADED_STATE__` （变量名可以任意定义）。
 
 **注意**: 不可变对象实现了 `toJSON()` 方法，因此你可以使用 `JSON.stringify` 来把他们转换为 JS 对象。
 
@@ -432,7 +430,7 @@ const store = createStore(combineReducers(
 
 > 💡 **[React Helmet](https://github.com/nfl/react-helmet)**: 把 `head` 内容注入到 React app，可运行于客户端和服务端。
 
-我建议你在标题写上 `FIX ME`，从而突出一个事实：虽然我们做了服务端渲染，但我们没有正确的把 `title` 标签添加进来（其他 `head` 内的标签页不对，因为它们应该是随着页面改变而改变的）。
+我建议你在标题写上 `FIX ME`，从而突出一个事实：虽然我们做了服务端渲染，但我们没有正确的把 `title` 标签添加进来（其他 `head` 内的标签也不对，因为它们应该是随着页面改变而改变的）。
 
 - 运行 `yarn add react-helmet`
 
