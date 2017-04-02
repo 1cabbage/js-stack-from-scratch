@@ -2,7 +2,7 @@
 
 本章代码存储在 [JS-Stack-Boilerplate repository](https://github.com/verekia/js-stack-boilerplate) 的 `master` 分支上。
 
-在本章，我们的应用会使用第三方服务，你可以下选择付费或者免费服务。在教程中使用这样的服务是有争议的，因为教程应该依赖于社区驱动的、免费开放的工具。为此，我维护了两个分支 [JS-Stack-Boilerplate repository](https://github.com/verekia/js-stack-boilerplate), `master` 和 `master-no-services（没有服务的 master 分支）`。
+在本章，我们的应用会使用第三方服务，你可以选择付费或者免费两种服务方式。在教程中使用这样的服务是有争议的，因为教程应该依赖于社区驱动、免费、开放的工具。为此，我维护了两个分支 [JS-Stack-Boilerplate repository](https://github.com/verekia/js-stack-boilerplate), `master` 和 `master-no-services（没有使用服务的 master 分支）`。
 
 ## Travis
 
@@ -18,13 +18,13 @@ node_js: node
 script: yarn test && yarn prod:build
 ```
 
-Travis 会自动检测到你使用了 Yarn —— 因为你有一个 `yarn.lock` 文件。每次向 Github 仓库提交代码的时候，`yarn test && yarn prod:build` 命令都会被执行。绿色表示代码没有出错。
+Travis 会自动检测到你使用了 Yarn —— 因为你有一个 `yarn.lock` 文件。每次向 Github 仓库提交代码的时候，`yarn test && yarn prod:build` 命令都会执行。绿色表示代码没有出错。
 
 ## Coveralls
 
 > 💡 **[Coveralls](https://coveralls.io)** 服务为你提供测试覆盖率的记录和统计数据。
 
-如果你的项目在 Github 开源，并且兼容与Coveralls 提供的 Continuous Integration（持续集成） 服务，那你唯一要做的事情，就是把 Jest 生成的覆盖率文件导入到 `coveralls`。
+如果你的项目在 Github 开源，并且兼容与 Coveralls 提供的 Continuous Integration（持续集成） 服务，那你唯一要做的事情，就是把 Jest 生成的覆盖率文件导入到 `coveralls`。
 
 - 运行 `yarn add --dev coveralls`
 
@@ -40,7 +40,7 @@ script: yarn test && yarn prod:build && cat ./coverage/lcov.info | ./node_module
 
 所有代码都通过 Travis 和 Coveralls 了么？很好，现在你可以炫耀一下“金闪闪”的徽章了。
 
-你可以直接只用 Travis 或 Coveralls 提供的代码，或者使用 [shields.io](http://shields.io/) 来美化一下，当然你也可以尝试自定义。本教程选择使用 shields.io ：
+你可以直接使用 Travis 或 Coveralls 提供的代码，或者使用 [shields.io](http://shields.io/) 来美化一下，当然你也可以尝试自定义。本教程选择使用 shields.io ：
 
 - 创建 `README.md` 文件：
 
@@ -57,7 +57,7 @@ script: yarn test && yarn prod:build && cat ./coverage/lcov.info | ./node_module
 
 先声明下，本教程没有接受过 Heroku 任何形式的赞助。Heroku 只是一个平台，我选择它，只是为了演示如何部署应用。是的，当你创造了一个伟大的产品，你就会得到别人的喜爱。
 
-**注意**：在之后，我们能会添加 AWS 部分；不过，事情得一件一件来。
+**注意**：在之后，我可能会添加 AWS 部分；不过，事情得一件一件来。
 
 ### Web 设置
 
@@ -120,7 +120,7 @@ web: node lib/server
 
 每次在 Heroku 部署应用，`heroku-postbuild` 命令都会执行。
 
-你可能需要向 Heroku 指明 Node 和 Yarn 的具体版本号。
+你需要向 Heroku 指明 Node 和 Yarn 的具体版本号。
 
 - `package.json` 文件添加如下内容：
 
