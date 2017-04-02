@@ -58,7 +58,7 @@ export const IO_SERVER_HELLO = 'IO_SERVER_HELLO'
 
 这些常量代表着浏览器和服务器会进行交换的 *消息类型*。我建议给这些常量加上 `IO_CLIENT` 或者 `IO_SERVER` 前缀，清楚地表示出 *谁* 是消息的发送方。否则，看到那么多消息类型的时候，你可能有点懵。
 
-如你所见，有一个名为 `IO_CLIENT_JOIN_ROOM` 的消息类型。为了演示，我们让客户端加入一个房间（类似聊天室）。当向特定的用户群发送消息的时候，房间非常有用。 because for the sake of demonstration, we are going to make clients join a room (like a chatroom). Rooms are useful to broadcast messages to specific groups of users.
+如你所见，有一个名为 `IO_CLIENT_JOIN_ROOM` 的消息类型。为了演示，我们让客户端加入一个房间（类似聊天室）。当向特定的用户群发送消息的时候，房间非常有用。
 
 - 创建 `src/server/socket.js`：
 
@@ -165,7 +165,7 @@ export default setUpSocket
 
 如果你已经理解了我们在服务端做的事情，那么理解客户端的东西也不难：
 
-- 客户端连接成功后，会在 console 面板 log 出来；并且发送一条 `IO_CLIENT_JOIN_ROOM` 房间 `hello-1234`。
+- 客户端连接成功后，会在 console 面板 log 出来；并且发送一条 `IO_CLIENT_JOIN_ROOM` 类型的消息，内容是 `hello-1234`。
 - 然后发送一条值 `Hello!` 的 `IO_CLIENT_HELLO` 消息。
 - 如果服务端推送一条 `IO_SERVER_HELLO`，我们会在客户端 log 出来。
 - 在断开连接的时候，也会有 log 信息。
