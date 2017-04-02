@@ -1,5 +1,8 @@
 # 从零开始构建 JavaScript 技术栈 - 中文版
-这是[从零开始构建 JavaScript 技术栈 - 中文版](https://github.com/verekia/js-stack-from-scratch)
+
+阅读[从零开始构建 JavaScript 技术栈 - 英文版](https://github.com/verekia/js-stack-from-scratch)
+
+
 [![Build Status](https://travis-ci.org/verekia/js-stack-from-scratch.svg?branch=master)](https://travis-ci.org/verekia/js-stack-from-scratch)
 [![Release](https://img.shields.io/github/release/verekia/js-stack-from-scratch.svg?style=flat-square)](https://github.com/verekia/js-stack-from-scratch/releases)
 [![Dependencies](https://img.shields.io/david/verekia/js-stack-boilerplate.svg?style=flat-square)](https://david-dm.org/verekia/js-stack-boilerplate)

@@ -1,6 +1,6 @@
 # 05 - Redux, Immutable, and Fetch
 
-**注意**： 本章中的 `state`，`action`，`reducer` 等术语都不会翻译~如果你之前没有用过 React 系列工具，学习这一章肯定有些吃力，甚至看不懂；但正如作者一开始所说，这个教程只是教你怎么构建一个技术栈，不是教你怎么写代码。如果需要学习 React，还是要去看文档才行~
+**注意**： 本章中的 `state`，`action`，`reducer` 等术语都不会翻译。如果你之前没有用过 React 系列工具，学习这一章肯定有些吃力，甚至看不懂；但正如作者一开始所说，这个教程只是教你怎么构建一个技术栈，不是教你怎么写代码。如果需要学习 React，还是要去看文档才行。
 
 本章代码在 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/05-redux-immutable-fetch).
 
