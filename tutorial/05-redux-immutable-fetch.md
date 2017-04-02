@@ -1,6 +1,6 @@
 # 05 - Redux, Immutable, and Fetch
 
-**注意**： 本章中的 `state`，`action`，`reducer` 等术语都不会被翻译~
+**注意**： 本章中的 `state`，`action`，`reducer` 等术语都不会翻译~如果你之前没有用过 React 系列工具，学习这一章肯定有些吃力，甚至看不懂；但正如作者一开始所说，这个教程只是教你怎么构建一个技术栈，不是教你怎么写代码。如果需要学习 React，还是要去看文档才行~
 
 本章代码在 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/05-redux-immutable-fetch).
 
@@ -96,7 +96,7 @@ const helloReducer = (state: Immut = initialState, action: { type: string, paylo
 export default helloReducer
 ```
 
-上面的代码用 Immutable Map 初始化了 reducer 的 state，该 state 包含一个属性 `message`，值为 `Initial reducer message`。`helloReducer` 处理 `SAY_HELLO` actions 的方式很简单 —— 只是把 `message` 的值设置为 payload 的值。Flow 注释把 `action` 参数解构为 `type` 和 `payload`；其中，`payload` 的类型为 `any`。为了给 `state` 提供类型注释，我们用 Flow 语法 `import type` 来得到 `fromJS` 它的类型。为了保持代码清晰和可读性，我们把这个类型重命名为 `Immut`，因为要是把注释写成 `state: fromJS`，让人看着头大。`import type` 和其他的 Flow 注释一样，不会影响代码运行。注意看一下 `Immutable.fromJS()` 和 `set()` 是怎么用的；在之前那个简单的例子里，我们已经用过一次了。
+上面的代码用 Immutable Map 初始化了 reducer 的 state，该 state 包含一个属性 `message`，值为 `Initial reducer message`。`helloReducer` 处理 `SAY_HELLO` actions 的方式很简单 —— 只是把 `message` 的值设置为 payload 的值。Flow 注释把 `action` 参数解构为 `type` 和 `payload`；其中，`payload` 的类型为 `any`。为了给 `state` 提供类型注释，我们用 Flow 语法 `import type` 来得到 `fromJS` 的类型。为了保持代码清晰和可读性，我们把这个类型重命名为 `Immut`，因为要是把注释写成 `state: fromJS`，让人看着头大。`import type` 和其他的 Flow 注释一样，不会影响代码运行。注意看一下 `Immutable.fromJS()` 和 `set()` 是怎么用的；在之前那个简单的例子里，我们已经用过一次了。
 
 
 ## React-Redux
@@ -127,7 +127,7 @@ const Button = ({ label, handleClick }: Props) =>
 export default Button
 ```
 
-**注意**: 我们在这里使用了 Flow 的 *类型别名*。我们自定义了 `Props` 类型，来解构组件的 `props`。
+**注意**: 在这里，我们使用了 Flow 的 *类型别名*。我们自定义了 `Props` 类型，来解构组件的 `props`。
 
 - 创建 `src/client/component/message.jsx`：
 
@@ -150,8 +150,6 @@ export default Message
 
 
 再强调一下，*components* 不能感知 Redux 的 **actions** 或者 app 的 **state**；所以，我们要创建 **containers**， 从而向这俩组件中传入 action dispatchers 和数据。
-
-Again, *components* don't know anything about Redux **actions** or the **state** of our app, which is why we are going to create smart **containers** that will feed the proper action dispatchers and data to these 2 dumb components.
 
 - 创建 `src/client/container/hello-button.js` ：
 
@@ -259,7 +257,7 @@ if (module.hot) {
 }
 ```
 
-花点时间 review 一下我们的代码。首先，用 `createStore` 方法, 以 reducers 为参数，创建了一个 *store*。我们现在只有一个 reducer，但为了未来代码的扩展性，我们用 `combineReducers` 方法把 reducers 组成了一个集合。该最后一个参数，是用来把 Redux 绑定到浏览器的 [开发工具](https://github.com/zalmoxisus/redux-devtools-extension) —— debug 的时候很有用。因为 `__REDUX_DEVTOOLS_EXTENSION__` 的下划线，ESLint 会报错，所以在这一行我们禁用了下划线规则。利用我们之前写的 `wrapApp` 方法，可以非常容易的把 app 包裹在 `Provider` 组件中，并向其中传入 store。
+花点时间 review 一下我们的代码。首先，用 `createStore` 方法, 以 reducers 为参数，创建了一个 *store*。我们现在只有一个 reducer，但为了未来代码的扩展性，我们用 `combineReducers` 方法把 reducers 组成了一个集合。最后一个参数，是用来把 Redux 绑定到浏览器的 [开发工具](https://github.com/zalmoxisus/redux-devtools-extension) —— debug 的时候很有用。因为 `__REDUX_DEVTOOLS_EXTENSION__` 的下划线，ESLint 会报错，所以在这一行我们禁用了下划线规则。利用我们之前写的 `wrapApp` 方法，可以非常容易的把 app 包裹在 `Provider` 组件中，并向其传入 store。
 
 🏁 现在可以用运行 `yarn start` 和 `yarn dev:wds`，然后打开 `http://localhost:8000`。页面内容是 "Initial reducer message" 和一个按钮。点击按钮，信息会变成 "Hello!"。如果你的浏览器安装了 Redux 开发者插件，就能更清楚的看到 app 的状态变化了。
 
@@ -271,7 +269,7 @@ if (module.hot) {
 
 ### The server endpoint
 
-- Create a `src/shared/routes.js` file containing:
+- 创建 `src/shared/routes.js` 文件：
 
 ```js
 // @flow
@@ -337,9 +335,9 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Button)
 ```
 
-这个例子只是为了说明怎样向异步请求传参数，为了简单，我传的值是硬编码的 `1234`；一般来说，这个值应该是来自用户输入。
+这个例子只是为了说明怎样向异步请求传参数，为了简单，我传的值是硬编码的 `1234` ；一般来说，这个值应该来自用户输入。
 
-- 创建 `src/client/container/message-async.js`：
+- 创建 `src/client/container/message-async.js` ：
 
 ```js
 // @flow
@@ -418,7 +416,7 @@ export const sayHelloAsync = (num: number) => (dispatch: Function) => {
 }
 ```
 
-`sayHelloAsync` 没返回一个 action，而是返回了一个发起 `fetch` 请求的方法。`fetch` 返回一个 `Promise`，根据异步请求的状态，这个请求会 *dispatch（分发）* 不同的 action。
+`sayHelloAsync` 没返回一个 action，而是返回了一个发起 `fetch` 请求的方法。`fetch` 返回一个  `Promise`，根据异步请求的状态，这个请求会 *dispatch（分发）* 不同的 action。
 
 ### 3 异步 action 处理器
 
@@ -464,7 +462,7 @@ export default helloReducer
 
 ### Redux-thunk
 
-在 `src/client/action/hello.js`，我们创建了 `sayHelloAsync`，他是一个 action creator，返回一个方法。Redux 原生并不支持这样使用。为了使用这样异步 async actions，我们用 `redux-thunk` *中间件* 来扩展 Redux 功能。
+在 `src/client/action/hello.js`，我们创建了 `sayHelloAsync`，他是一个 action creator，返回一个方法。Redux 原生并不支持这样使用。为了使用异步 actions，我们用 `redux-thunk` *中间件* 来扩展 Redux 功能。
 
 - 安装 `yarn add redux-thunk`
 
@@ -548,7 +546,7 @@ export default App
 
 这一部分，我们会测试 actions 和 reducer。从测试 actions 开始：
 
-为了分离 `action/hello.js` 的代码逻辑，我们需要进行 *mock（模拟）* 一些东西；`fetch` 操作也需要模拟，测试中我们并不用真的发起 AJAX 操作。
+为了分离 `action/hello.js` 的代码逻辑，我们需要 *mock（模拟）* 一些东西；`fetch` 操作也需要模拟，测试中我们并不用真的发起 AJAX 操作。
 
 - 运行 `yarn add --dev redux-mock-store fetch-mock`
 
@@ -611,7 +609,7 @@ test('sayHelloAsync data error', () => {
 })
 ```
 
-上面的代码首先用 `const mockStore = configureMockStore([thunkMiddleware])` 这行代码模拟 Redux store。这样，当我们 dispatch （分发）actions 时，就不会触发 reducer 的逻辑了。每一个测试，我们都用 `fetchMock.get()` 来模拟 `fetch`，并且返回值是我们自定义的。我们真正测试的东西，是 store 分发的一系列 actions，这里，我们用到了 `redux-mock-store` 提供的 'store.getActions()' 方法。在每一次测试之后，我们用 `fetchMock.restore()` 方法来把 'fetch' 恢复到初始状态。
+上面的代码首先用 `const mockStore = configureMockStore([thunkMiddleware])` 这行代码模拟 Redux store。这样，当我们 dispatch（分发）actions 时，就不会触发 reducer 的逻辑了。每一个测试，我们都用 `fetchMock.get()` 来模拟 `fetch`，并且返回值是我们自定义的。我们真正测试的东西，是 store 分发的一系列 actions，这里，我们用到了 `redux-mock-store` 提供的 'store.getActions()' 方法。在每一次测试之后，我们用 `fetchMock.restore()` 方法来把 'fetch' 恢复到初始状态。
 
 reducer 的测试相对简单：
 
