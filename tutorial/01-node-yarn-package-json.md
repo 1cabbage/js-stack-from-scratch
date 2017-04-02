@@ -1,6 +1,6 @@
 # 01 - Node, Yarn, and `package.json`
 
-本章代码在 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/01-node-yarn-package-json).
+本章代码在 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/01-node-yarn-package-json)。
 
 这一节中我们会配置 Node, Yarn, 初始的 `package.json` 文件，并尝试安装一个包。
 
