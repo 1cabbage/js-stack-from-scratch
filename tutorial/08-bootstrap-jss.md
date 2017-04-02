@@ -2,7 +2,7 @@
 
 本章代码在 [JS-Stack-Boilerplate repository](https://github.com/verekia/js-stack-boilerplate) 的分支 [`master-no-services`](https://github.com/verekia/js-stack-boilerplate/tree/master-no-services)
 
-我们的 app 有点丑，让我们用推特的 Bootstrap 加点样式来美化一下。然后我们会引入 CSS-in-JS 包来加入自定义的样式。
+我们的 app 有点丑，让我们用推特的 Bootstrap 加点样式美化一下。我们会引入 CSS-in-JS 包来加入自定义的样式。
 
 ## Twitter Bootstrap
 
@@ -13,9 +13,9 @@
 - 使用官方发布版本，**该版本使用了 jQuery 和 Tether**。
 - 使用重新实现的第三方库 [React-Bootstrap](https://react-bootstrap.github.io/) 或者 [Reactstrap](https://reactstrap.github.io/).
 
-和官方版本相比，第三方库的 React 组件用起来相当简单。虽然这么说，但我本人并不太像用第三方库。因为第三方版本总是在官方版本 *之后* 发布（有时候会要隔很久才更新）。有时，第三方的库还不能和 Bootstrap 的主题相兼容，因为这些主题使用了自己的 JS。Bootstrap 的一大优点就是拥有一个庞大的设计师社区，如果这些设计者提供的主题不被第三方库支持，那实在是有点说不过去。
+和官方版本相比，第三方库的 React 组件用起来相当简单。虽然这么说，但我本人并不太想用第三方库。因为第三方版本总是在官方版本 *之后* 发布（有时候要隔很久才更新）。有时，第三方的库还不能和 Bootstrap 的主题相兼容，因为这些主题使用了自己的 JS。Bootstrap 的一大优点就是拥有一个庞大的设计师社区，如果这些设计者提供的主题不被第三方库支持，那实在是有点说不过去。
 
-因为以上原因，我做出了妥协：选择官方版本，并结合 jQuery 和 Tether 的使用。但这样的话，打包后的文件大小成了个问题 —— 打包后的文件大约 200KB （开启了 Gzipped 压缩）。我觉得这个大小还可以接受，但如果对你来说文件还是太大，那你可能需要找另一种方式来用 Bootstrap，或者干脆不选择 Bootstrap。
+因为以上原因，我做出了妥协：选择官方版本，并结合 jQuery 和 Tether 使用。但这样的话，打包后的文件大小成了个问题 —— 打包后的文件大约 200KB （开启了 Gzipped 压缩）。我觉得这个大小还可以接受，但如果对你来说文件还是太大，那你可能需要找另一种方式来用 Bootstrap，或者干脆不选择 Bootstrap。
 
 ### Bootstrap's CSS
 
@@ -266,7 +266,7 @@ const App = () =>
 
 这是一个 *React 行内样式* 的示例。
 
-这段代码在 DOM 中会被转换成： `<div style="padding-top:54px;">`，用来美化导航栏内容。 [React 行内样式](https://speakerdeck.com/vjeux/react-css-in-js) 把你从 CSS 全局明明空间里解放出来，让组件作用域成为可能。但是这样做也有代价：某些原生的 CSS 特点还没有被支持，比如说 `:hover`，媒体查询，动画或者 `font-face` 就不能用了。这也是我们稍后引入 CSS-in-JS， JSS 库的[原因之一](https://github.com/cssinjs/jss/blob/master/docs/benefits.md#compared-to-inline-styles)。
+这段代码在 DOM 中会被转换成： `<div style="padding-top:54px;">`。 [React 行内样式](https://speakerdeck.com/vjeux/react-css-in-js) 把你从 CSS 全局命名空间里解放出来，让组件作用域成为可能。但是这样做也有代价：某些原生的 CSS 特点还没有被支持，比如说 `:hover`，媒体查询，动画或者 `font-face` 就不能用了。这也是我们稍后引入 CSS-in-JS，JSS 库的[原因之一](https://github.com/cssinjs/jss/blob/master/docs/benefits.md#compared-to-inline-styles)。
 
 - 修改 `src/shared/component/nav.jsx`：
 
@@ -314,7 +314,7 @@ const Nav = () =>
 export default Nav
 ```
 
-这里添加了点新东西：`handleNavLinkClick`。在开发 SPA(单页面应用)时，我用 Bootstrap 的 `navbar` 遇到了一个问题：在手机上，点击链接的时候，菜单栏不会这贴，而且没有滚动到页面顶部。 这正好给我个机会，好向你演示一下怎样在你的 app 中结合使用 jQuery 和 Bootstrap 的某些代码
+这里添加了点新东西：`handleNavLinkClick`。在开发 SPA(单页面应用)时，我用 Bootstrap 的 `navbar` 时遇到了一个问题：在手机上点击链接的时候，菜单栏不会折叠，而且没有滚动到页面顶部。这正好给我机会，向你演示一下怎样在你的 app 中结合使用 jQuery 和 Bootstrap 的某些代码。
 
 ```js
 import $ from 'jquery'
@@ -334,7 +334,7 @@ const handleNavLinkClick = () => {
 
 ## CSS 发展现状
 
-2016 年的 JavaScript 技术栈之争已经尘埃落定。在本教程中使用到的库和工具应该能让你站在 *工业标准的前沿阵地*（*然而 —— 及时是这样，本教程还是可能在一年后完全过时 —— O__O*）。必须承认，这个技术栈设置起来有点复杂，但是，至少大多是前端开发者认为 React-Redux-Webpack 是前端的发展方向。说道 CSS，我就有点悲观了 —— 什么都没定下来，没有标准化的方向，也没有标准的技术栈。
+2016 年的 JavaScript 技术栈之争已经尘埃落定。在本教程中使用到的库和工具应该能让你站在 *工业标准的前沿阵地*（*然而 —— 即使是这样，本教程还是可能在一年后完全过时 —— O__O*）。必须承认，这个技术栈设置起来有点复杂；但是，至少大多数前端开发者认为 React-Redux-Webpack 是前端的发展方向。说到 CSS，我就有点悲观了 —— 什么都没定下来，没有标准化的方向，也没有标准的技术栈。
 
 SASS， BEM， SMACSS， SUIT， Bass CSS， React Inline Styles， LESS， Styled Components， CSSX， JSS， Radium， Web Components， CSS Modules， OOCSS， Tachyons， Stylus， Atomic CSS， PostCSS， Aphrodite， React Native for Web（都是术语，就不翻译啦 O——0 ），还有很多我已经忘了名字，不过照样能完成工作的工具。这些工具都很棒，但问题是，没有一种工具占压倒性优势，这就让人头大了。
 
@@ -342,7 +342,7 @@ React 党偏爱行内样式，CSS-in-JS 或者 CSS Modules，因为这些工具�
 
 CSS Modules 挺好用，但它不能完全发挥 JavaScript 的威力。它只是提供了不错的封装，但在我看来，React 行内样式和 CSS-in-JS 完全把写样式带到了一个新高度。我个人建议是普通的样式就用 React 行内样式（你在 React Native 中也是用它）；当要用 `:hover` 或者媒体查询的时候，就用 CSS-in-JS。
 
-有 [太多 CSS-in-JS 的库](https://github.com/MicheleBertoli/css-in-js)了。JSS 是一个功能全面、写法简单、 [性能优异](https://github.com/cssinjs/jss/blob/master/docs/performance.md) 库。
+有 [太多 CSS-in-JS 的库](https://github.com/MicheleBertoli/css-in-js)了。JSS 是一个功能全面、写法简单、 [性能优异](https://github.com/cssinjs/jss/blob/master/docs/performance.md) 的库。
 
 ## JSS
 
@@ -445,9 +445,10 @@ const HomePage = ({ classes }: { classes: Object }) =>
 
 export default injectSheet(styles)(HomePage)
 ```
-和 React 行内样式不同的是，JSS 使用了 class。样式作为参数传递个 `injectSheet`，最终，CSS 的 class 作为属性传递给组件。
 
-🏁 运行 `yarn start` 和 `yarn dev:wds`。打开主页，查看页面源文件（不是审查元素）。你会发现，初始化渲染的时候，JSS 是在 DOM 中的。初始化的时候，JSS 在 `<style class="jss-ssr">` 元素中（只有主页是这样）。审查元素的方式，就找不到 JSS 了，因为它已经被 `<style type="text/css" data-jss data-meta="HomePage">` 替换掉了。
+和 React 行内样式不同的是，JSS 使用了 class。样式作为参数传递给 `injectSheet`，最终，CSS 的 class 作为属性传递给组件。
+
+🏁 运行 `yarn start` 和 `yarn dev:wds`。打开主页，查看页面源文件（不是审查元素）。你会发现，初始化渲染的时候，JSS 是在 DOM 中的。初始化时，JSS 在 `<style class="jss-ssr">` 元素中（只有主页是这样）。审查元素的方式，就找不到 JSS 了，因为它已经被 `<style type="text/css" data-jss data-meta="HomePage">` 替换掉了。
 
 **注意**：在生产环境中，`data-meta` 会被混淆。酷！
 
