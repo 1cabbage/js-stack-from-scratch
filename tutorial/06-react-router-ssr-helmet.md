@@ -440,7 +440,7 @@ const store = createStore(combineReducers(
 import Helmet from 'react-helmet'
 // [...]
 const renderApp = (/* [...] */) => {
-
+  // [...]
   const appHtml = ReactDOMServer.renderToString(/* [...] */)
   const head = Helmet.rewind()
 
