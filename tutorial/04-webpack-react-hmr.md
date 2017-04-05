@@ -286,7 +286,7 @@ if (module.hot) {
 
 `App` 必须是 `react-hot-loader` 导出的 `AppContainer` 的一个子元素；热更新的时候，我们需要把 `App` 的最新版本重新 `require`。为了保持代码整洁和 DRY，我们创建了一个名为 `wrapApp` 的方法；在两处需要渲染 `App` 的地方，都用到了这个方法。出于代码可读性的考虑，你可以把 `eslint-disable global-require` 写在该文件的最顶部。
 
-🏁 重启 `yarn dev:wds` 进程并在浏览器访问 `localhost:8000`。在开发者模式下，你会看到浏览器输出了一些和 HMR 相关的日志。随便修改点 `src/client/app.jsx` 文件中的内容，你的修改会很快投射到浏览器中，并且页面没有刷新。
+🏁 重启 `yarn dev:wds` 进程并在浏览器访问 `localhost:8000`。在开发者模式下，你会看到浏览器输出了一些和 HMR 相关的日志。随便修改点 `src/client/app.jsx` 文件中的内容，你的修改会很快投射到浏览器中，并且没有整页刷新。
 
 下一章： [05 - Redux, Immutable, Fetch](05-redux-immutable-fetch.md#readme)
 
