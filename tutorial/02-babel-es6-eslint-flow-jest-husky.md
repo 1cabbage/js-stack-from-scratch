@@ -186,6 +186,8 @@ npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\
 
 本章中我们在命令行中配置了 ESLint，在构建代码或提交代码的时候，会得到错误提示。其实，你也可以让你的 IDE 使用你的配置，这样你就能得到更及时的错误反馈了。别使用 IDE 原生的 ES6 错误提示！通过相应的配置，让编辑器使用你指定的包；这样，你才能在使用其他的编辑器时，得到同样的提示。
 
+（译者注：如果你的编辑器是 Atom 并且安装了 lint 插件，那么在配置完之后，编辑器会自动根据 `.eslintrc.json` 中的配置来检测代码；初次生成配置文件，可能不会检测，可以尝试重启 Atom）
+
 ## Flow
 
 > 💡 **[Flow](https://flowtype.org/)**: Facebook 提供的一个静态类型检查器。举个例子，如果你把一个字符串类型的值赋值给一个数值类型的变量，它就会报错。
