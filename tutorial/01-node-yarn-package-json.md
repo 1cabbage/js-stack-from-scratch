@@ -101,7 +101,7 @@ curl -o- -L https://yarnpkg.com/install.sh | bash
 /*.log
 ```
 
-`.DS_Store` 文件是 macOs 系统自动生成的文件，你不需要在 git 仓库中提交这些文件。
+`.DS_Store` 文件是 macOS 系统自动生成的文件，你不需要在 git 仓库中提交这些文件。
 
 `npm-debug.log` 和 `yarn-error.log` 是包管理器出错的时候生成的文件，仓库中也不需要提交这些文件。
 
