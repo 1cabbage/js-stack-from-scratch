@@ -27,7 +27,7 @@ Node 版本需要高于 6.5.0。
 
 ## NPM
 
-NPM 是 Node 默认的包管理器。安装 Node 的时候，它也会自动安装。包管理器用来安装和管理包（包就是你或者他人写的代码模块）。在该教程中，我们会用到大量包，不过，我们用到的是另一个包管理器， Yarn。
+NPM 是 Node 默认的包管理器。安装 Node 的时候，它也会自动安装。包管理器用来安装和管理包（包就是你或者他人写的代码模块）。在该教程中，我们会用到大量包，不过，我们用到的是另一个包管理器 `Yarn`。
 
 ## Yarn
 
@@ -117,7 +117,7 @@ curl -o- -L https://yarnpkg.com/install.sh | bash
 
 - 在 `.gitignore` 添加 `node_modules/`
 
-你可能已经注意到，`yarn.lock` 已经被 Yarn 自动生成了。你需要在仓库中提交这个文件，因为它保证团队成员使用的包属于同一个版本。如果你坚持使用 NPM，与 `yarn.lock` 相对应的是 *shrinkwrap*。
+你可能已经注意到，`yarn.lock` 已经被 Yarn 自动生成了。你需要在仓库中提交这个文件，因为它保证团队成员使用的包属于同一个版本。如果你坚持使用 NPM，相对应的是使用 `npm shrinkwrap` 命令，这个命令会创建一个 `npm-shrinkwrap.json` 文件，与 `yarn.lock` 作用相同。
 
 - 在 `index.js` 文件中添加如下代码:
 
