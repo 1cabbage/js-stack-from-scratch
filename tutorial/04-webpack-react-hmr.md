@@ -1,6 +1,6 @@
 # 04 - Webpack, React, and Hot Module Replacement
 
-本章代码在 [这里](https://github.com/verekia/js-stack-walkthrough/tree/master/04-webpack-react-hmr).
+Code for this chapter available [here](https://github.com/verekia/js-stack-walkthrough/tree/master/04-webpack-react-hmr).
 
 ## Webpack
 
@@ -242,6 +242,9 @@ entry: [
 devServer: {
   port: WDS_PORT,
   hot: true,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+  },
 },
 plugins: [
   new webpack.optimize.OccurrenceOrderPlugin(),
@@ -251,7 +254,9 @@ plugins: [
 ],
 ```
 
-- 修改 `src/client/index.jsx` ：
+`headers` 消息头是为了给 HMR 设置跨域资源共享。
+
+- 修改 `src/client/index.jsx` 文件:
 
 ```js
 // @flow
