@@ -69,10 +69,6 @@
 - [Chinese (simplified)](https://github.com/yepbug/js-stack-from-scratch/) by [@yepbug](https://github.com/yepbug)
 - [French](https://github.com/naomihauret/js-stack-from-scratch/) by [Naomi Hauret](https://twitter.com/naomihauret)
 - [Italian](https://github.com/fbertone/guida-javascript-moderno) by [Fabrizio Bertone](https://github.com/fbertone) - [fbertone.it](http://fbertone.it)
-<<<<<<< HEAD
-- [简体中文](https://github.com/yepbug/js-stack-from-scratch/) by [@yepbug](https://github.com/yepbug)
-=======
->>>>>>> upstream/master
 
 查看 [进行中的翻译](https://github.com/verekia/js-stack-from-scratch/issues/147).
 
