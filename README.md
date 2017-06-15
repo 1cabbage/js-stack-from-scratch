@@ -66,18 +66,23 @@
 ### V2
 
 - [Bulgarian](https://github.com/mihailgaberov/js-stack-from-scratch) by [mihailgaberov](http://github.com/mihailgaberov)
+- [Chinese (simplified)](https://github.com/yepbug/js-stack-from-scratch/) by [@yepbug](https://github.com/yepbug)
+- [French](https://github.com/naomihauret/js-stack-from-scratch/) by [Naomi Hauret](https://twitter.com/naomihauret)
 - [Italian](https://github.com/fbertone/guida-javascript-moderno) by [Fabrizio Bertone](https://github.com/fbertone) - [fbertone.it](http://fbertone.it)
+<<<<<<< HEAD
 - [简体中文](https://github.com/yepbug/js-stack-from-scratch/) by [@yepbug](https://github.com/yepbug)
+=======
+>>>>>>> upstream/master
 
 查看 [进行中的翻译](https://github.com/verekia/js-stack-from-scratch/issues/147).
 
 ### V1
 
-- [中文](https://github.com/pd4d10/js-stack-from-scratch) by [@pd4d10](http://github.com/pd4d10)
-- [Italiano](https://github.com/fbertone/js-stack-from-scratch) by [Fabrizio Bertone](https://github.com/fbertone)
-- [日本語](https://github.com/takahashim/js-stack-from-scratch) by [@takahashim](https://github.com/takahashim)
-- [Русский](https://github.com/UsulPro/js-stack-from-scratch) by [React Theming](https://github.com/sm-react/react-theming)
-- [ไทย](https://github.com/MicroBenz/js-stack-from-scratch) by [MicroBenz](https://github.com/MicroBenz)
+- [Chinese (simplified)](https://github.com/pd4d10/js-stack-from-scratch) by [@pd4d10](http://github.com/pd4d10)
+- [Italian](https://github.com/fbertone/js-stack-from-scratch) by [Fabrizio Bertone](https://github.com/fbertone)
+- [Japanese](https://github.com/takahashim/js-stack-from-scratch) by [@takahashim](https://github.com/takahashim)
+- [Russian](https://github.com/UsulPro/js-stack-from-scratch) by [React Theming](https://github.com/sm-react/react-theming)
+- [Thai](https://github.com/MicroBenz/js-stack-from-scratch) by [MicroBenz](https://github.com/MicroBenz)
 
 ## Credits
 

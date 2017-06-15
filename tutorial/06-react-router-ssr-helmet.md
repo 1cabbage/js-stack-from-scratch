@@ -8,9 +8,7 @@
 
 > 💡 **[React Router](https://reacttraining.com/react-router/)** 用来在 React app 的页面间实现路由。这个包既可以运行在客户端，也能运行在服务端。
 
-React Router 的 V4 版本更新很大，该版本还处在测试阶段。为了让本教程具有前瞻性，我们会使用这个版本。
-
-- 运行 `yarn add react-router@next react-router-dom@next`
+- `yarn add react-router react-router-dom`
 
 在客户端，要把 app 包裹在 `BrowserRouter` 组件中。
 
