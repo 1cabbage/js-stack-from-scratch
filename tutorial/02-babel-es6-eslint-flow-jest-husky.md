@@ -113,6 +113,8 @@ npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\
 
 - 运行 `yarn add --dev eslint`
 
+【译者注】目前，airbnb 插件和 eslint4 并没有完全兼容，如果用教程中的方法，可能会有报错。[链接](https://github.com/airbnb/javascript/issues/1454) 所以，我建议安装 eslint3。 `yarn add eslint@3.19.0 --dev`
+
 修改 `package.json` 的 `scripts` ，添加一个 `test` 任务：
 
 ```json
