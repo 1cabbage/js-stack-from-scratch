@@ -251,6 +251,13 @@ npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\
 suppress_comment= \\(.\\|\n\\)*\\flow-disable-next-line
 ```
 
+【译者注】因为 `eslint-plugin-jsx-a11y` 版本与 `flow` 不完全兼容，所以，需要在 `.flowconfig` 中，加入如下内容：
+
+```
+[ignore]
+.*/node_modules/eslint-plugin-jsx-a11y/*
+```
+
 如果你想让 Flow 忽略下一行代码，你可以用上面的注释方法；它的用法和 `eslint-disable` 很像：
 
 ```js
