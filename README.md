@@ -35,6 +35,8 @@
 
 可运行于 Linux， macOS， 以及 Windows。
 
+> 注意：本教程写作与2017年5月，因此，部分库的 API 已经做了修改。但教程中 95% 的内容仍然是有效的。如果你在阅读的时候遇到了问题，请到 [issues](https://github.com/verekia/js-stack-from-scratch/issues?q=is%3Aopen+is%3Aissue+label%3Abug) 中查询。
+
 ## 目录
 
 [01 - Node, Yarn, `package.json`](/tutorial/01-node-yarn-package-json.md#readme)
