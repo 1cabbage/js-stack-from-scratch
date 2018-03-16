@@ -28,7 +28,7 @@ h1 {
 }
 ```
 
-- 创建 `src/client/` 文件夹
+- 创建 `src/client/` 文件夹和`src/server/`文件夹
 
 - 创建 `src/shared/` 文件夹
 

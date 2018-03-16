@@ -90,6 +90,8 @@ export default {
 
 - 把 `/dist/` 添加到 `.gitignore`
 
+**注意**: 截止2018年3月12日，`CLI`已经移到一个单独的包`webpack-cli`，因此还需要单独安装`yarn add webpack-cli -D`。
+
 ### 更新任务
 
 为了在开发环境中使用热替换技术，我们需要用到 `webpack-dev-server`；在生产环境中，我们用到的则是 `webpack` 生成的包。无论在开发环境还是生产环境，`--progress` 都应该加上 —— 它会在命令行展示 Webpack 的运行状况。在生产环境，为了压缩代码，还应该加上 `-p`，并且把 `NODE_ENV` 的值设为 `production`。
