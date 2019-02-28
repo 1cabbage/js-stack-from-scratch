@@ -194,7 +194,7 @@ npm info eslint-config-airbnb@latest peerDependencies --json | command sed 's/[\
 
 > 💡 **[Flow](https://flowtype.org/)**: Facebook 提供的一个静态类型检查器。举个例子，如果你把一个字符串类型的值赋值给一个数值类型的变量，它就会报错。
 
-现在，我们的 JS 代码是标准的 ES6 格式。Flow 能够检查这样的代码，但为了发挥它的最大威力，我们要在我们的代码中加入注释；但这样，我们的代码就不那么符合标准了。为了让 Babel 和 ESLint 在解析我们的代码时不崩溃，我们需要通过配置让它们理解注释。
+现在，我们的 JS 代码是标准的 ES6 格式。Flow 能够检查这样的代码，但为了发挥它的最大威力，我们要在我们的代码中加入类型的注解；但这样，我们的代码就不那么符合标准了。为了让 Babel 和 ESLint 在解析我们的代码时不崩溃，我们需要通过配置让它们理解注释。
 
 - 运行 `yarn add --dev flow-bin babel-preset-flow babel-eslint eslint-plugin-flowtype`
 
